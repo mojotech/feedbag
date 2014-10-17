@@ -1,0 +1,28 @@
+.banner-template
+
+  .body
+
+    //- Event Body
+    div(ng-bind-html="data.body")
+
+
+  //- temp until css styles
+  hr
+
+
+  .banner.clearfix
+
+    .user-image-wrapper.pull-left
+      img.user-image.img-circle(ng-src="{{data.user.github.raw.avatar_url}}&s=42" height="42px")
+
+
+    .details.pull-left
+      //- Event Description
+      .description-wrapper(ng-bind-html="data.description")
+
+      //- Time of Event
+      .time-wrapper
+        .time.text-muted
+          i(class="fa fa-clock-o")
+          | &nbsp;
+          | {{data.date | date}}

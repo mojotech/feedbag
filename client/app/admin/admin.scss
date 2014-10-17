@@ -1,0 +1,24 @@
+.trash { color:rgb(209, 91, 71); }
+
+.user {
+
+    h3 {
+        margin-top: 15px;
+        margin-bottom: 5px;
+    }
+
+    .trash {
+        padding: 32px 5px;
+    }
+
+    .user-image {
+        width: 60px;
+        height: 60px;
+        overflow: hidden;
+        margin: 10px;
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-size: 60px;
+        border-radius: 50%;
+    }
+}

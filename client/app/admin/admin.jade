@@ -1,0 +1,9 @@
+.container
+    .user.card-wrapper.col-md-6(ng-repeat="user in users | filter:searchTerm", class="card-filter-animation")
+      .card
+        .user-image.pull-left(ng-style="{'background-image':'url(' + (user.pictureUrl || 'http://www.gravatar.com/avatar/' + user.gravatarHash) + '?s=70)'}")
+        .user-info.pull-left
+          h3 {{user.github.raw.name}}
+          span.text-muted {{user.email}}
+        a.trash.pull-right(ng-click="delete(user)")
+          span.glyphicon.glyphicon-trash

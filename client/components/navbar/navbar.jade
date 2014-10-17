@@ -1,0 +1,23 @@
+.navbar(ng-controller="NavbarCtrl", ui-scrollfix)
+  .container.nav-container
+      .navbar-header
+        a.navbar-brand.navbar-logo(href="/")
+          | Feed
+          strong Bag
+
+      ul.nav.navbar-right
+        li(ng-hide="isLoggedIn()")
+          a.btn.navbar-btn.btn-github(href="", ng-click="loginOauth('github')")
+            i.fa.fa-github
+              | &nbsp;
+              | Connect with Github
+        li.dropdown.profile-dropdown(ng-show="isLoggedIn()")
+          a.dropdown-toggle(href="#", data-toggle="dropdown")
+            img.img-circle.img-profile(ng-src="{{getCurrentUser().pictureUrl || 'http://www.gravatar.com/avatar/' + getCurrentUser().gravatarHash}}")
+          ul.dropdown-menu(role="menu")
+            li(ng-show="isAdmin()", ng-class="{active: isActive('/admin')}")
+              a(href="/admin", tooltip="Admin", tooltip-placement="right", tooltip-popup-delay="500")
+                span.glyphicon.glyphicon-user
+            li(ng-show="isLoggedIn()", ng-class="{active: isActive('/logout')}")
+              a(href="", ng-click="logout()", tooltip="Logout", tooltip-placement="right", tooltip-popup-delay="500")
+                span.glyphicon.glyphicon-off

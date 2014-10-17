@@ -1,0 +1,11 @@
+.blank-template
+
+  //- Event User
+  div
+    | {{data.user.github.raw.name}}
+
+  //- Event Description
+  div(ng-bind-html="data.description")
+
+  //- Event Body
+  div(ng-bind-html="data.body")

@@ -1,0 +1,152 @@
+$icon-font-path: "/bower_components/bootstrap-sass-official/vendor/assets/fonts/bootstrap/";
+$fa-font-path: "/bower_components/font-awesome/fonts";
+
+
+//Overide Variables
+
+//** Colors
+$green:                     #28ba00 !default;
+$green-dark:                darken($green, 28%) !default;
+$yellow:                    #f4ba4a !default;
+$yellow-dark:               darken($yellow, 28%) !default;
+$red:                       #f05050 !default;
+$red-dark:                  darken($red, 28%) !default;
+
+$white:                     #ffffff !default;
+$gray-lighter:              #eef2f5 !default;
+$gray-light:                #e5eaee !default;
+$gray:                      #b6c2c9 !default;
+$gray-dark:                 darken(#fff, 30%) !default;
+$blue-dark:                 #1c2b36 !default;
+$text:                      #666 !default;
+$black:                     #000 !default;
+
+
+$slow:                      450ms !default;
+$moderate:                  300ms !default;
+$fast:                      180ms !default;
+
+
+
+$brand-primary:             $green !default;
+$brand-success:             $green !default;
+$brand-info:                $gray-light !default;
+$brand-warning:             #e65626 !default;
+$brand-danger:              #f05050 !default;
+
+
+$body-bg:                   $gray-light !default;
+$text-color:                $black !default;
+$link-color:                $brand-primary !default;
+$link-hover-color:          darken($link-color, 5%) !default;
+$text-muted:                $gray !default;
+
+$headings-font-weight:      300 !default;
+$input-bg:                  $gray-light !default;
+$input-color:               $text !default;
+
+
+
+$padding-base-vertical:     7px !default;
+$padding-base-horizontal:   16px !default;
+
+$padding-large-vertical:    12px !default;
+$padding-large-horizontal:  18px !default;
+
+$padding-small-vertical:    6px !default;
+$padding-small-horizontal:  12px !default;
+
+$padding-xs-vertical:       4px !default;
+$padding-xs-horizontal:     10px !default;
+
+$border-radius-base:        1px !default;
+$border-radius-large:       3px !default;
+$border-radius-small:       0px !default;
+
+
+$nav-link-hover-bg:         $gray-light !default;
+$nav-tabs-border-color:     $gray-light !default;
+
+$navbar-height:             58px !default;
+
+
+// Easings
+$cubic:                     cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+
+@import 'bootstrap-sass-official/vendor/assets/stylesheets/bootstrap';
+@import 'font-awesome/scss/font-awesome';
+
+
+
+body {
+  padding-top: 50px;
+}
+
+.content {
+  padding-top: 100px;
+}
+
+.no-padding {
+  padding: 0 !important;
+}
+
+
+//Overide Classes
+.btn {
+  outline: none !important;
+
+  &:active,
+  &.active {
+    outline: none;
+    box-shadow: none;
+    }
+}
+
+
+
+/**
+ * App-wide Styles
+ */
+body {
+  -webkit-backface-visibility:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+
+.fixed-top {
+  position: fixed;
+  top: 0;
+}
+
+.card-wrapper {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.card {
+    @include clearfix();
+    display: block;
+    background-color: $white;
+    padding: 8px;
+    border-radius: 4px;
+    margin: 10px 0;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .15)
+}
+
+
+@mixin clearfix {
+  &:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+}
+
+// Component styles are injected through grunt
+// injector
+@import 'activity/activity.scss';
+@import 'admin/admin.scss';
+@import 'profile/login/login.scss';
+@import 'modal/modal.scss';
+@import 'navbar/navbar.scss';
+// endinjector

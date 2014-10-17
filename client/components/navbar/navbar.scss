@@ -1,0 +1,107 @@
+.img-profile {
+    height: 50px;
+    min-height: 50px;
+    max-width: 50px;
+}
+
+.navbar-logo {
+    color: $text;
+    font-size: 32px;
+    font-weight: 200;
+
+    strong {
+        font-weight: 500;
+    }
+}
+
+.profile-dropdown {
+
+    &.open {
+
+        .dropdown-menu {
+            transform: none;
+            opacity: 1;
+            visibility: visible;
+        }
+    }
+
+    .dropdown-menu {
+        margin-top: 4px !important;
+        background-color: $green;
+        color: $white;
+        min-width: 0;
+        border: none;
+        box-shadow: none;
+        border-radius: 6px !important;
+        font-size: 18px;
+        right: 15px;
+        visibility: hidden;
+        opacity: 0;
+        display: block;
+        transition: all 200ms ease-out;
+        transform: translatey(-15px);
+
+        &:after {
+            bottom: 100%;
+            left: 50%;
+            border: solid transparent;
+            content: " ";
+            height: 0;
+            width: 0;
+            position: absolute;
+            pointer-events: none;
+            border-bottom-color: $green;
+            border-width: 6px;
+            margin-left: -6px;
+        }
+
+        a {
+            color: $white;
+            padding: 5px 15px;
+
+            &:hover {
+                background-color: darken($green, 5%);
+                color: $white;
+            }
+        }
+    }
+}
+
+.navbar-nav > li > a {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.nav-container {
+    padding-top: 0;
+}
+
+// Before Scrollfix
+.navbar {
+    position: absolute;
+    width: 100%;
+    z-index: 1024;
+
+    transition: all 300ms ease-out;
+}
+
+.nav .open > a, .nav .open > a:hover, .nav .open > a:focus,
+.nav > li > a:hover, .nav > li > a:focus {
+    background: none;
+}
+
+// After Scrollfix
+.ui-scrollfix {
+    position: fixed;
+    width: 100%;
+    top: 0;
+    background-color: $black;
+
+    .navbar-brand {
+        color: $gray-dark;
+
+        &:hover, &:active, &:focus {
+            color: $green;
+        }
+    }
+}
