@@ -19,9 +19,6 @@ UserSchema = new Schema
     type: String
     default: "user"
 
-  gravatarHash:
-    type: String
-
   last_modified_event:
     type: Date
 
@@ -38,6 +35,9 @@ UserSchema = new Schema
     access_token:
       type: String
 
+    avatar_url:
+      type: String
+
     events:
       last_modified:
         type: Date
@@ -51,14 +51,6 @@ Virtuals
 UserSchema.virtual("token").get ->
   _id: @_id
   role: @role
-
-###
-Pre-save hook
-###
-UserSchema.pre "save", (next) ->
-  self = this
-  self.gravatarHash = crypto.createHash("md5").update(self.email).digest("hex")
-  next()
 
 UserSchema.plugin CreationPlugin
 module.exports = mongoose.model("User", UserSchema)

@@ -15,7 +15,7 @@ exports.setup = (User, config) ->
     , (err, user) ->
       unless user
         user = new User(
-          displayName: profile.displayName
+          name: profile.displayName
           email: profile.emails[0].value
           role: "user"
           username: profile.username
@@ -25,6 +25,7 @@ exports.setup = (User, config) ->
             username: profile._json.login
             raw: profile._json
             access_token: accessToken
+            avatar_url: profile._json.avatar_url
         )
         user.save (err) ->
           done err  if err

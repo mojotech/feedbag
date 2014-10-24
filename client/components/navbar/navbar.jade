@@ -13,7 +13,7 @@
               | Connect with Github
         li.dropdown.profile-dropdown(ng-show="isLoggedIn()")
           a.dropdown-toggle(href="#", data-toggle="dropdown")
-            img.img-circle.img-profile(ng-src="{{getCurrentUser().pictureUrl || 'http://www.gravatar.com/avatar/' + getCurrentUser().gravatarHash}}")
+            img.img-circle.img-profile(ng-src="{{getCurrentUser().github.avatar_url}}")
           ul.dropdown-menu(role="menu")
             li(ng-show="isAdmin()", ng-class="{active: isActive('/admin')}")
               a(href="/admin", tooltip="Admin", tooltip-placement="right", tooltip-popup-delay="500")
