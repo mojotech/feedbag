@@ -42,13 +42,13 @@ module.exports = (options, callback) ->
   # Body template to render into the body element in the banner template
   body =
     """
-      <div class="test"><%- name %> did something awesome</div>
+      <div>Created Pull-Request <a href="<%- prUrl %>"><%- pr %></a></div>
     """
 
   # Event description template
   description =
     """
-      <a href="<%- profileUrl %>"><%- name %></a> created new pull-request
+      <a href="<%- profileUrl %>"><%- name %></a> created pull-request <a href="<%- prUrl %>"><%- prNumber %></a>
     """
 
   # Map events into an array of activity events
@@ -59,6 +59,9 @@ module.exports = (options, callback) ->
       # Define the variables that will apear in the template
       templateVariables =
         name: options.user.github.raw.name
+        pr: event.payload.pull_request?.title ? ""
+        prNumber: event.payload.pull_request?.number ? ""
+        prUrl: event.payload.pull_request?.html_url ? ""
         profileUrl: options.user.github.raw.html_url
 
       # Return the activity event hash

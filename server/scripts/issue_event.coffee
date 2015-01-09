@@ -10,13 +10,14 @@ module.exports = (options, callback) ->
   # Body template to render into the body element in the banner template
   body =
     """
-      <div class="test"><%- name %> new issue created</div>
+      <div>Created Issue <a href="<%- issueUrl %>">#<%= issue %></a></div>
+      <div>on <a href="<%= repoUrl %>"><%= repo %></a></div>
     """
 
   # Event description template
   description =
     """
-      <a href="<%- profileUrl %>"><%- name %></a> created issue <%- title %>
+      <a href="<%- profileUrl %>"><%- name %></a> created issue <a href="<%- issueUrl %>">#<%= issueNumber %></a>
     """
 
 
@@ -28,8 +29,13 @@ module.exports = (options, callback) ->
       # Define the variables that will apear in the template
       templateVariables =
         name: options.user.github.raw.name
+        issue: event.payload.issue.title ? ""
+        issueNumber: event.payload.issue.number ? ""
+        issueUrl: event.payload.issue.html_url ? ""
+        repo: event.repo.name ? ""
+        repoUrl: event.repo.url ? ""
         profileUrl: options.user.github.raw.html_url
-        title: event.payload.issue?.title
+
 
       # Return the activity event hash
       name: "issue_comment"
