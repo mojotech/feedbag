@@ -84,6 +84,18 @@ func parseTemplate(dir string, file os.FileInfo) (*Template, error) {
 			return nil, errors.New(fmt.Sprintf("Invalid template config: %q", string(config)))
 		}
 
+		if template.Id == "" {
+			return nil, errors.New(`Template is missing "id" field`)
+		}
+
+		if template.Name == "" {
+			return nil, errors.New(`Template is missing "name" field`)
+		}
+
+		if template.Event == "" {
+			return nil, errors.New(`Template is missing "event" field`)
+		}
+
 		// Now store the actual DOM for the template output
 		dom := []byte{}
 		for {

@@ -14,7 +14,7 @@ func TestParseTemplatesDir(t *testing.T) {
 	for _, test := range cases {
 		templates, err := ParseTemplatesDir(test.dir)
 		if test.validCount != len(templates) {
-			t.Errorf("ParseTemplatesDir expected %d valid templates, only found %d in dir: %s", test.validCount, len(templates), test.dir)
+			t.Errorf("ParseTemplatesDir expected %d valid templates but found %d in dir: %s", test.validCount, len(templates), test.dir)
 		}
 
 		if test.throwsErr {
