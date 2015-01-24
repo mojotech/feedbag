@@ -49,6 +49,7 @@ func providerCallback(c *gin.Context) {
 		ProfileUrl:  user.RawData["url"].(string),
 		Email:       user.Email,
 		Joined:      user.RawData["created_at"].(string),
+		Raw:         user.RawData,
 	}
 
 	err = u.Create()
