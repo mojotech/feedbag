@@ -33,6 +33,13 @@ func main() {
 		github.New(os.Getenv("GITHUB_KEY"), os.Getenv("GITHUB_SECRET"), "http://localhost:3000/auth/github/callback"),
 	)
 
+	// Parse templates
+	templates, err := ParseTemplatesDir(*templatesDir)
+	if err != nil {
+		checkErr(err, "Problem parsing templates")
+	}
+	log.Println(fmt.Sprintf("Found %d valid templates", len(templates)))
+
 	//Configure port for server to run on
 	port := *configPort
 	if len(os.Getenv("PORT")) > 0 {
