@@ -3,13 +3,34 @@
 	"GoVersion": "go1.4.1",
 	"Deps": [
 		{
+			"ImportPath": "code.google.com/p/goauth2/oauth",
+			"Comment": "weekly-56",
+			"Rev": "afe77d958c701557ec5dc56f6936fcc194d15520"
+		},
+		{
 			"ImportPath": "github.com/gin-gonic/gin",
 			"Comment": "v0.4-16-g28b9ff9",
 			"Rev": "28b9ff9e3495dabeaea2da86c100effbf1a68346"
 		},
 		{
+			"ImportPath": "github.com/gorilla/context",
+			"Rev": "215affda49addc4c8ef7e2534915df2c8c35c6cd"
+		},
+		{
+			"ImportPath": "github.com/gorilla/securecookie",
+			"Rev": "f0559d009e6943011cd1ba6eb16195cf5e0ed326"
+		},
+		{
+			"ImportPath": "github.com/gorilla/sessions",
+			"Rev": "aa5e036e6c44aec69a32eb41097001978b29ad31"
+		},
+		{
 			"ImportPath": "github.com/julienschmidt/httprouter",
 			"Rev": "2b89d7c27df525fc9b85a9ae255867c484c50ff0"
+		},
+		{
+			"ImportPath": "github.com/markbates/goth",
+			"Rev": "58040cbbd0f5cc5f46bb557eead3de64d8b398f8"
 		}
 	]
 }
