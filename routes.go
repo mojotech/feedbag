@@ -27,7 +27,7 @@ func getUsers(c *gin.Context) {
 	u := UserList{}
 	err := u.List()
 	if err != nil {
-		c.JSON(400, gin.H{"error": "Failed to fetch users from the database"})
+		c.JSON(400, gin.H{"error": err})
 	}
 
 	c.JSON(200, u)
@@ -53,11 +53,11 @@ func providerCallback(c *gin.Context) {
 
 	err = u.Create()
 	if err != nil {
-		c.JSON(200, gin.H{"error": "Failed to create user"})
+		c.JSON(200, gin.H{"error": err})
 		return
 	}
 
-	c.JSON(200, user)
+	c.JSON(200, u)
 }
 
 func providerAuth(c *gin.Context) {
