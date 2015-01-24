@@ -21,7 +21,7 @@ type Template struct {
 
 func ParseTemplatesDir(templatesDir string) ([]*Template, error) {
 	files, err := ioutil.ReadDir(templatesDir)
-	checkErr(err, "Read templates dir failed")
+	checkErr(err, "Read templates dir failed:")
 
 	templates := []*Template{}
 
