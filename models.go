@@ -1,13 +1,23 @@
 package main
 
-type User struct {
-	Id          int64       `json:"id"`
-	Name        string      `json:"name"`
-	Username    string      `json:"username"`
-	AvatarUrl   string      `json:"avatar_url"`
-	ProfileUrl  string      `json:"profile_url"`
-	Email       string      `json:"email"`
-	Joined      string      `json:"joined"`
-	Raw         interface{} `json:"raw"`
-	AccessToken string      `json:"-"`
+import "time"
+
+// TimeStamp struct for the Model Interface
+type TimeStamp struct {
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
+}
+
+// UpdateTime Method for setting/updating the time
+// struct elements
+func (t *TimeStamp) UpdateTime() {
+
+	currentTime := time.Now().UTC()
+	if !t.CreatedAt.IsZero() {
+		t.UpdatedAt = currentTime
+		return
+	}
+	t.CreatedAt = currentTime
+	t.UpdatedAt = currentTime
+	return
 }

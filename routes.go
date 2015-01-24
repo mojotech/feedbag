@@ -16,25 +16,48 @@ func setupRoutes(r *gin.Engine) {
 	//Api endpoints
 	a := r.Group("api")
 	a.GET("/activity", getActivity)
+	a.GET("/users", getUsers)
 }
 
 func getActivity(c *gin.Context) {
 	c.JSON(200, gin.H{"activity": "here"})
 }
 
-func providerCallback(c *gin.Context) {
-	// print our state string to the console
-	fmt.Println(c.Request.URL.Query().Get("state"))
+func getUsers(c *gin.Context) {
+	u := UserList{}
+	err := u.List()
+	if err != nil {
+		c.JSON(400, gin.H{"error": "Failed to fetch users from the database"})
+	}
 
+	c.JSON(200, u)
+}
+
+func providerCallback(c *gin.Context) {
 	user, err := gothic.CompleteUserAuth(c.Writer, c.Request)
 	if err != nil {
 		fmt.Fprintln(c.Writer, err)
 		return
-
 	}
 
-	c.JSON(200, gin.H{"user": user})
+	//Add user to the user table
+	u := User{
+		Name:        user.Name,
+		Username:    user.RawData["login"].(string),
+		AvatarUrl:   user.AvatarURL,
+		AccessToken: user.AccessToken,
+		ProfileUrl:  user.RawData["url"].(string),
+		Email:       user.Email,
+		Joined:      user.RawData["created_at"].(string),
+	}
 
+	err = u.Create()
+	if err != nil {
+		c.JSON(200, gin.H{"error": "Failed to create user"})
+		return
+	}
+
+	c.JSON(200, user)
 }
 
 func providerAuth(c *gin.Context) {
