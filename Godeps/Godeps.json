@@ -13,6 +13,11 @@
 			"Rev": "28b9ff9e3495dabeaea2da86c100effbf1a68346"
 		},
 		{
+			"ImportPath": "github.com/go-gorp/gorp",
+			"Comment": "v1.7-8-g0a7ddd4",
+			"Rev": "0a7ddd445e5c2da784ad90b045210b3c93b6ab93"
+		},
+		{
 			"ImportPath": "github.com/gorilla/context",
 			"Rev": "215affda49addc4c8ef7e2534915df2c8c35c6cd"
 		},
@@ -31,6 +36,10 @@
 		{
 			"ImportPath": "github.com/markbates/goth",
 			"Rev": "58040cbbd0f5cc5f46bb557eead3de64d8b398f8"
+		},
+		{
+			"ImportPath": "github.com/mattn/go-sqlite3",
+			"Rev": "d8029554b4cbb9a1c12311d307f4154b515566b4"
 		}
 	]
 }
