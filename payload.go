@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 
 	"github.com/google/go-github/github"
 )
@@ -24,8 +23,6 @@ func ProcessPayload(e []github.Event, u User) ([]ActivityPayload, error) {
 		if err := json.Unmarshal(*event.RawPayload, &rawPayload); err != nil {
 			panic(err.Error())
 		}
-
-		fmt.Println(*event.Type)
 
 		switch *event.Type {
 		case "PullRequestEvent":

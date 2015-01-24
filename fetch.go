@@ -53,6 +53,7 @@ func userRoutine(u User) error {
 		}
 
 		activityPayload, err := ProcessPayload(events, u)
+		ActivityParser(activityPayload)
 
 		fmt.Println(activityPayload)
 
