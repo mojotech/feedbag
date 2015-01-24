@@ -10,13 +10,33 @@ import (
 
 func init() {
 	fmt.Println("Starting go routines")
+
+	err := startExistingUsers()
+	if err != nil {
+		panic(err)
+	}
 }
 
-func StartGoRoutine(u *User) {
+func startExistingUsers() error {
+	u := UserList{}
+
+	err := u.List()
+	if err != nil {
+		return err
+	}
+
+	for _, user := range u {
+		StartUserRoutine(user)
+	}
+
+	return nil
+}
+
+func StartUserRoutine(u User) {
 	go userRoutine(u)
 }
 
-func userRoutine(u *User) error {
+func userRoutine(u User) error {
 	t := &oauth.Transport{
 		Token: &oauth.Token{AccessToken: u.AccessToken},
 	}
@@ -27,7 +47,7 @@ func userRoutine(u *User) error {
 	opts := github.ListOptions{1, 50}
 
 	for {
-		event, _, err := client.Activity.ListEvents(&opts)
+		event, _, err := client.Activity.ListEventsPerformedByUser(u.Username, false, &opts)
 		if err != nil {
 			panic(err)
 		}
