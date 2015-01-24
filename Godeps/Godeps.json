@@ -1,0 +1,15 @@
+{
+	"ImportPath": "feedbag",
+	"GoVersion": "go1.4.1",
+	"Deps": [
+		{
+			"ImportPath": "github.com/gin-gonic/gin",
+			"Comment": "v0.4-16-g28b9ff9",
+			"Rev": "28b9ff9e3495dabeaea2da86c100effbf1a68346"
+		},
+		{
+			"ImportPath": "github.com/julienschmidt/httprouter",
+			"Rev": "2b89d7c27df525fc9b85a9ae255867c484c50ff0"
+		}
+	]
+}
