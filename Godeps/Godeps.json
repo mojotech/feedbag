@@ -18,6 +18,14 @@
 			"Rev": "0a7ddd445e5c2da784ad90b045210b3c93b6ab93"
 		},
 		{
+			"ImportPath": "github.com/google/go-github/github",
+			"Rev": "1e55bf6be814270d7cc31a60868c4bd89e4e68c0"
+		},
+		{
+			"ImportPath": "github.com/google/go-querystring/query",
+			"Rev": "d8840cbb2baa915f4836edda4750050a2c0b7aea"
+		},
+		{
 			"ImportPath": "github.com/gorilla/context",
 			"Rev": "215affda49addc4c8ef7e2534915df2c8c35c6cd"
 		},
