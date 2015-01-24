@@ -47,13 +47,14 @@ func userRoutine(u User) error {
 	opts := github.ListOptions{1, 50}
 
 	for {
-		event, _, err := client.Activity.ListEventsPerformedByUser(u.Username, false, &opts)
+		events, _, err := client.Activity.ListEventsPerformedByUser(u.Username, false, &opts)
 		if err != nil {
 			panic(err)
 		}
 
-		//DEBUG: print out events
-		fmt.Println(event)
+		activityPayload, err := ProcessPayload(events, u)
+
+		fmt.Println(activityPayload)
 
 		// Wait 5 seconds after events are recieved and
 		// start again
