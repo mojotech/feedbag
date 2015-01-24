@@ -2,6 +2,8 @@ package main
 
 import (
 	"database/sql"
+	"encoding/json"
+	"errors"
 	"flag"
 	"fmt"
 	"log"
@@ -50,6 +52,42 @@ func main() {
 	r.Run(fmt.Sprintf(":%s", port))
 }
 
+//Raw Json type for Type Converter
+type RawJson map[string]interface{}
+
+type TypeConverter struct{}
+
+func (me TypeConverter) ToDb(val interface{}) (interface{}, error) {
+	switch t := val.(type) {
+	case RawJson:
+		b, err := json.Marshal(t)
+		if err != nil {
+			return "", err
+		}
+		return string(b), nil
+	}
+
+	return val, nil
+}
+
+func (me TypeConverter) FromDb(target interface{}) (gorp.CustomScanner, bool) {
+	switch target.(type) {
+	case *RawJson:
+		binder := func(holder, target interface{}) error {
+			s, ok := holder.(*string)
+			if !ok {
+				return errors.New("FromDb: Unable to convert Json to *string")
+			}
+			b := []byte(*s)
+			return json.Unmarshal(b, target)
+
+		}
+		return gorp.CustomScanner{new(string), target, binder}, true
+
+	}
+	return gorp.CustomScanner{}, false
+}
+
 func setupDb() *gorp.DbMap {
 	// connect to db using standard Go database/sql API
 	// use whatever database/sql driver you wish
@@ -58,6 +96,8 @@ func setupDb() *gorp.DbMap {
 
 	// construct a gorp DbMap
 	dbmap := &gorp.DbMap{Db: db, Dialect: gorp.SqliteDialect{}}
+
+	dbmap.TypeConverter = TypeConverter{}
 
 	// add a table, setting the table name to 'posts' and
 	// specifying that the Id property is an auto incrementing PK
