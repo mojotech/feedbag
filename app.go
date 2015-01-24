@@ -7,11 +7,11 @@ import (
 	"log"
 	"os"
 
-	"feedbag/Godeps/_workspace/src/github.com/gin-gonic/gin"
-	"feedbag/Godeps/_workspace/src/github.com/go-gorp/gorp"
-	"feedbag/Godeps/_workspace/src/github.com/markbates/goth"
-	"feedbag/Godeps/_workspace/src/github.com/markbates/goth/providers/github"
-	_ "feedbag/Godeps/_workspace/src/github.com/mattn/go-sqlite3"
+	"github.com/gin-gonic/gin"
+	"github.com/go-gorp/gorp"
+	"github.com/markbates/goth"
+	"github.com/markbates/goth/providers/github"
+	_ "github.com/mattn/go-sqlite3"
 )
 
 var (

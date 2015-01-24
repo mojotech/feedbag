@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"net/http"
 
-	"feedbag/Godeps/_workspace/src/github.com/gin-gonic/gin"
-	"feedbag/Godeps/_workspace/src/github.com/markbates/goth/gothic"
+	"github.com/gin-gonic/gin"
+	"github.com/markbates/goth/gothic"
 )
 
 func setupRoutes(r *gin.Engine) {
