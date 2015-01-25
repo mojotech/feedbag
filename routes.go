@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"log"
 	"net/http"
-	"path/filepath"
+	"os"
 	"text/template"
 
 	"github.com/gin-gonic/gin"
@@ -32,7 +32,12 @@ func SetupRoutes(r *gin.Engine, s *socketio.Server) {
 }
 
 func indexHandler(c *gin.Context) {
-	t, err := template.ParseFiles(filepath.Join("web", "index.tmpl"))
+	//Configure default index file location
+	indexTemplate := *indexFile
+	if len(os.Getenv("INDEX_FILE")) > 0 {
+		indexTemplate = os.Getenv("INDEX_FILE")
+	}
+	t, err := template.ParseFiles(indexTemplate)
 	if err != nil {
 		panic(err)
 	}

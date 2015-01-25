@@ -52,5 +52,9 @@
     <!-- endinject -->
     <!-- endbuild -->
 
+    {{range $template := .}}
+    <script id="{{$template.Id}}" type="x-tmpl-mustache">{{printf "%s" $template.Template}}</script>
+    {{end}}
+
   </body>
 </html>

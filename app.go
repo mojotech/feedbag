@@ -19,12 +19,16 @@ import (
 var (
 	configPort   = flag.String("port", "3000", "Port to run the server on")
 	templatesDir = flag.String("templates", "./templates", "Path to your templates directory")
+	indexFile    = flag.String("index-file", "./public/index.html", "Path to the index template")
 	dbmap        = setupDb()
 	templates    = setupTemplates()
 	activityChan = make(chan []Activity)
 )
 
 func main() {
+	//Parse flags
+	flag.Parse()
+
 	//Setup gin
 	r := gin.Default()
 
