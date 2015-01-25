@@ -14,6 +14,7 @@ import (
 	"github.com/markbates/goth"
 	"github.com/markbates/goth/providers/github"
 	_ "github.com/mattn/go-sqlite3"
+	"github.com/tommy351/gin-cors"
 )
 
 var (
@@ -31,6 +32,8 @@ func main() {
 
 	//Setup gin
 	r := gin.Default()
+
+	r.Use(cors.Middleware(cors.Options{AllowCredentials: true}))
 
 	// Close the database connection if we fail
 	defer dbmap.Db.Close()
