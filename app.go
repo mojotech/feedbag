@@ -71,6 +71,13 @@ func (me TypeConverter) ToDb(val interface{}) (interface{}, error) {
 			return "", err
 		}
 		return string(b), nil
+
+	case ActivityPayload:
+		b, err := json.Marshal(t)
+		if err != nil {
+			return "", err
+		}
+		return string(b), nil
 	}
 
 	return val, nil
@@ -86,11 +93,21 @@ func (me TypeConverter) FromDb(target interface{}) (gorp.CustomScanner, bool) {
 			}
 			b := []byte(*s)
 			return json.Unmarshal(b, target)
-
 		}
 		return gorp.CustomScanner{new(string), target, binder}, true
 
+	case *ActivityPayload:
+		binder := func(holder, target interface{}) error {
+			s, ok := holder.(*string)
+			if !ok {
+				return errors.New("FromDb: Unable to convert Json to *string")
+			}
+			b := []byte(*s)
+			return json.Unmarshal(b, target)
+		}
+		return gorp.CustomScanner{new(string), target, binder}, true
 	}
+
 	return gorp.CustomScanner{}, false
 }
 
@@ -109,6 +126,7 @@ func setupDb() *gorp.DbMap {
 	// specifying that the Id property is an auto incrementing PK
 	dbmap.AddTableWithName(User{}, "users").SetKeys(true, "Id")
 	dbmap.AddTableWithName(ActivityPayload{}, "events").SetKeys(true, "Id")
+	dbmap.AddTableWithName(Activity{}, "activities").SetKeys(true, "Id")
 
 	// create the table. in a production system you'd generally
 	// use a migration tool, or create the tables via scripts
