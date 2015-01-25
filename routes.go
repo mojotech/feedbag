@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"path/filepath"
+	"text/template"
 
 	"github.com/gin-gonic/gin"
 	"github.com/markbates/goth/gothic"
@@ -13,10 +15,21 @@ func setupRoutes(r *gin.Engine) {
 	r.GET("/auth/github/callback", providerCallback)
 	r.GET("/auth/github", providerAuth)
 
+	//Index Route
+	r.GET("/", indexHandler)
+
 	//Api endpoints
 	a := r.Group("api")
 	a.GET("/activity", getActivity)
 	a.GET("/users", getUsers)
+}
+
+func indexHandler(c *gin.Context) {
+	t, err := template.ParseFiles(filepath.Join("web", "index.tmpl"))
+	if err != nil {
+		panic(err)
+	}
+	t.Execute(c.Writer, templates)
 }
 
 func getActivity(c *gin.Context) {
