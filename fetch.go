@@ -8,16 +8,8 @@ import (
 	"github.com/google/go-github/github"
 )
 
-func init() {
+func StartExistingUsers(c chan<- []Activity) error {
 	fmt.Println("Starting go routines")
-
-	err := startExistingUsers()
-	if err != nil {
-		panic(err)
-	}
-}
-
-func startExistingUsers() error {
 	u := UserList{}
 
 	err := u.List()
@@ -26,17 +18,17 @@ func startExistingUsers() error {
 	}
 
 	for _, user := range u {
-		StartUserRoutine(user)
+		StartUserRoutine(user, c)
 	}
 
 	return nil
 }
 
-func StartUserRoutine(u User) {
-	go userRoutine(u)
+func StartUserRoutine(u User, c chan<- []Activity) {
+	go userRoutine(u, c)
 }
 
-func userRoutine(u User) error {
+func userRoutine(u User, c chan<- []Activity) error {
 	t := &oauth.Transport{
 		Token: &oauth.Token{AccessToken: u.AccessToken},
 	}
@@ -56,6 +48,7 @@ func userRoutine(u User) error {
 		activities := ActivityParser(activityPayload)
 
 		fmt.Println(activities)
+		c <- activities
 
 		// Wait 5 seconds after events are recieved and
 		// start again
