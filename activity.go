@@ -8,9 +8,26 @@ import (
 )
 
 type Activity struct {
+	Id         int64           `json:"id"`
 	TemplateId string          `json:"template_id"`
 	Event      ActivityPayload `json:"event"`
 	TimeStamp
+}
+
+type ActivityList []Activity
+
+func (a *ActivityList) List() error {
+	_, err := dbmap.Select(a, "SELECT * FROM ACTIVITIES ORDER BY CreatedAt DESC")
+	return err
+}
+
+func (a *Activity) Create() error {
+	// run the UpdateTime ethod on the user model
+	a.UpdateTime()
+
+	// run the DB insert function
+	err := dbmap.Insert(a)
+	return err
 }
 
 func ActivityParser(p []ActivityPayload) []Activity {
@@ -27,6 +44,10 @@ func ActivityParser(p []ActivityPayload) []Activity {
 				activity.TemplateId = template.Id
 				activity.Event = payload
 				activity.UpdateTime()
+
+				err := activity.Create()
+				checkErr(err, "Problem saving activity")
+
 				activities = append(activities, activity)
 
 			}

@@ -40,7 +40,13 @@ func indexHandler(c *gin.Context) {
 }
 
 func getActivity(c *gin.Context) {
-	c.JSON(200, gin.H{"activity": "here"})
+	a := ActivityList{}
+	err := a.List()
+	if err != nil {
+		c.JSON(400, gin.H{"error": err})
+	}
+
+	c.JSON(200, a)
 }
 
 func getUsers(c *gin.Context) {
