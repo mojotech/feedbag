@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"strconv"
 	"time"
 
 	"code.google.com/p/goauth2/oauth"
@@ -39,7 +40,7 @@ func userRoutine(u User, c chan<- []Activity) error {
 	opts := github.ListOptions{1, 50}
 
 	for {
-		events, _, err := client.Activity.ListEventsPerformedByUser(u.Username, false, &opts)
+		events, resp, err := client.Activity.ListEventsPerformedByUser(u.Username, false, &opts)
 		if err != nil {
 			panic(err)
 		}
@@ -50,9 +51,14 @@ func userRoutine(u User, c chan<- []Activity) error {
 		fmt.Println(activities)
 		c <- activities
 
-		// Wait 5 seconds after events are recieved and
-		// start again
-		time.Sleep(5 * time.Second)
+		// Wait as long as the X-Poll-Interval header says to
+		interval, err := strconv.ParseInt(resp.Header["X-Poll-Interval"][0], 10, 8)
+		if err != nil {
+			// if strconv failed for whatever reason, use the default X-Poll-Interval value of 60
+			time.Sleep(60 * time.Second)
+		} else {
+			time.Sleep(time.Duration(interval) * time.Second)
+		}
 	}
 
 	panic("Shouldn't be here")
