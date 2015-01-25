@@ -85,6 +85,9 @@ func providerCallback(c *gin.Context) {
 	} else {
 		err = u.Create()
 		checkErr(err, "Failed to create new user row")
+
+		//Add the user's go routine
+		StartUserRoutine(u, activityChan)
 	}
 
 	c.JSON(200, u)
