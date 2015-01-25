@@ -7,10 +7,14 @@ import (
 )
 
 type ActivityPayload struct {
+	EventType string `json:"event_type"`
 	//All possible variables/events/etc
-	OpenPullRequest  bool   `json:"open_pull_request"`
-	ClosePullRequest bool   `json:"close_pull_request"`
-	PRTitle          string `json:"pr_title"`
+	OpenPullRequest    bool   `json:"open_pull_request"`
+	ClosePullRequest   bool   `json:"close_pull_request"`
+	CreateIssueComment bool   `json:"create_issue_comment"`
+	PRTitle            string `json:"pr_title"`
+	PRNumber           int    `json:"pr_number"`
+	IssueNumber        int    `json:"issue_number"`
 }
 
 func ProcessPayload(e []github.Event, u User) ([]ActivityPayload, error) {
@@ -18,8 +22,8 @@ func ProcessPayload(e []github.Event, u User) ([]ActivityPayload, error) {
 
 	for _, event := range e {
 		payload := ActivityPayload{}
-		rawPayload := make(map[string]interface{})
 
+		rawPayload := make(map[string]interface{})
 		if err := json.Unmarshal(*event.RawPayload, &rawPayload); err != nil {
 			panic(err.Error())
 		}
@@ -28,8 +32,10 @@ func ProcessPayload(e []github.Event, u User) ([]ActivityPayload, error) {
 		case "PullRequestEvent":
 			// Set Pull Request Event type (open or closed)
 			if val, ok := rawPayload["action"]; ok && val == "opened" {
+				payload.EventType = "OpenPullRequest"
 				payload.OpenPullRequest = true
 			} else {
+				payload.EventType = "ClosePullRequest"
 				payload.ClosePullRequest = true
 			}
 
@@ -38,11 +44,24 @@ func ProcessPayload(e []github.Event, u User) ([]ActivityPayload, error) {
 				// Set title of PR
 				payload.PRTitle = pr["title"].(string)
 
+				// Set Pr Number
+				payload.PRNumber = int(pr["number"].(float64))
+			}
+			activityPayloads = append(activityPayloads, payload)
+
+		case "IssueCommentEvent":
+			if val, ok := rawPayload["action"]; ok && val == "created" {
+				payload.EventType = "CreateIssueComment"
+				payload.CreateIssueComment = true
 			}
 
-			activityPayloads = append(activityPayloads, payload)
-		}
+			if issue, ok := rawPayload["issue"].(map[string]interface{}); ok {
+				payload.IssueNumber = int(issue["number"].(float64))
 
+			}
+			activityPayloads = append(activityPayloads, payload)
+
+		}
 	}
 
 	return activityPayloads, nil

@@ -8,45 +8,57 @@ import (
 )
 
 type Activity struct {
-	Template  string                 `json:"template"`
-	Event     map[string]interface{} `json:"event"`
-	EventTime string                 `json:"event_time"`
+	TemplateId string          `json:"template_id"`
+	Event      ActivityPayload `json:"event"`
 	TimeStamp
 }
 
-func ActivityParser(p []ActivityPayload) {
+func ActivityParser(p []ActivityPayload) []Activity {
+	activities := []Activity{}
+
 	for _, payload := range p {
 		for _, template := range templates {
-			if ParseConditional(template.Condition, payload) {
-				fmt.Println("Condition True")
-				//TODO: Add to db and send down the wire to the client
+			activity := Activity{}
+
+			if CheckEventType(template.Event, payload) && ValidateConditional(template.Condition, payload) {
+				fmt.Println("Building activity")
+
+				//Create the activity for this template and append to list
+				activity.TemplateId = template.Id
+				activity.Event = payload
+				activity.UpdateTime()
+				activities = append(activities, activity)
+
 			}
 		}
 	}
+
+	return activities
 }
 
-func ParseConditional(c string, p ActivityPayload) bool {
+func CheckEventType(e string, p ActivityPayload) bool {
+	if e == "*" {
+		return true
+	}
+	return e == p.EventType
+}
+
+func ValidateConditional(c string, p ActivityPayload) bool {
+	if c == "" {
+		return true
+	}
+
 	buf := new(bytes.Buffer)
 
-	if c == "" {
-		return false
-	}
-
 	tmpl, err := template.New("condition").Parse(fmt.Sprintf("{{%s}}", c))
-	if err != nil {
-		panic(err)
-	}
+	checkErr(err, "Failed to parse template condition")
 
 	err = tmpl.Execute(buf, p)
-	if err != nil {
-		panic(err)
-	}
+	checkErr(err, "Failed to execute template condition")
 
 	resultStr := buf.String()
 	result, err := strconv.ParseBool(resultStr)
-	if err != nil {
-		panic(err)
-	}
+	checkErr(err, "Failed to parse bool from condition")
 
 	return result
 }

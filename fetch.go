@@ -53,9 +53,9 @@ func userRoutine(u User) error {
 		}
 
 		activityPayload, err := ProcessPayload(events, u)
-		ActivityParser(activityPayload)
+		activities := ActivityParser(activityPayload)
 
-		fmt.Println(activityPayload)
+		fmt.Println(activities)
 
 		// Wait 5 seconds after events are recieved and
 		// start again

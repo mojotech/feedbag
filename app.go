@@ -82,16 +82,6 @@ func (me TypeConverter) FromDb(target interface{}) (gorp.CustomScanner, bool) {
 	return gorp.CustomScanner{}, false
 }
 
-func setupTemplates() []*Template {
-	// Parse templates
-	templates, err := ParseTemplatesDir(*templatesDir)
-	if err != nil {
-		checkErr(err, "Problem parsing templates")
-	}
-	log.Println(fmt.Sprintf("Found %d valid templates", len(templates)))
-	return templates
-}
-
 func setupDb() *gorp.DbMap {
 	// connect to db using standard Go database/sql API
 	// use whatever database/sql driver you wish
