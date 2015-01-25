@@ -48,7 +48,6 @@ func userRoutine(u User, c chan<- []Activity) error {
 		activityPayload, err := ProcessPayload(events, u)
 		activities := ActivityParser(activityPayload)
 
-		fmt.Println(activities)
 		c <- activities
 
 		// Wait as long as the X-Poll-Interval header says to
