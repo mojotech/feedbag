@@ -1,0 +1,19 @@
+{
+  "name": "feedBag",
+  "version": "0.0.0",
+  "dependencies": {
+    "jquery": "~2.1.1",
+    "angular-animate": "~1.3.4",
+    "angular-sanitize": "~1.3.4",
+    "angular-route": "~1.3.4",
+    "angular-material": "~0.5.1",
+    "angular": "~1.3.4"
+  },
+  "devDependencies": {
+    "angular-mocks": "~1.3.4"
+  },
+  "resolutions": {
+    "jquery": "~2.1.1",
+    "angular": "~1.3.4"
+  }
+}
