@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"log"
 
 	"github.com/googollee/go-socket.io"
@@ -32,12 +31,7 @@ func StartSocketPusher(s *socketio.Server, c <-chan []Activity) error {
 	go func() {
 		for {
 			activities := <-c
-			json, err := json.Marshal(activities)
-			if err != nil {
-				log.Println("** Problem marshaling activities:", err.Error())
-			} else {
-				s.BroadcastTo("feedbag", "activity", string(json))
-			}
+			s.BroadcastTo("feedbag", "activity", activities)
 		}
 	}()
 
