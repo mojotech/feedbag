@@ -1,6 +1,6 @@
 {
-	"ImportPath": "feedbag",
-	"GoVersion": "go1.4.1",
+	"ImportPath": "github.com/gophergala/FeedBag",
+	"GoVersion": "go1.4",
 	"Deps": [
 		{
 			"ImportPath": "code.google.com/p/goauth2/oauth",
@@ -26,6 +26,15 @@
 			"Rev": "d8840cbb2baa915f4836edda4750050a2c0b7aea"
 		},
 		{
+			"ImportPath": "github.com/googollee/go-engine.io",
+			"Rev": "f4551ef981772ab0770bf9dec9c5cb5e4841cb55"
+		},
+		{
+			"ImportPath": "github.com/googollee/go-socket.io",
+			"Comment": "0.9.x-15-g18c9785",
+			"Rev": "18c97859bee1bdaab084b12ee1c9f1c195f8a64d"
+		},
+		{
 			"ImportPath": "github.com/gorilla/context",
 			"Rev": "215affda49addc4c8ef7e2534915df2c8c35c6cd"
 		},
@@ -36,6 +45,10 @@
 		{
 			"ImportPath": "github.com/gorilla/sessions",
 			"Rev": "aa5e036e6c44aec69a32eb41097001978b29ad31"
+		},
+		{
+			"ImportPath": "github.com/gorilla/websocket",
+			"Rev": "ab5b3a61f5b6aa323d66ece457334396c4ccdd03"
 		},
 		{
 			"ImportPath": "github.com/julienschmidt/httprouter",
