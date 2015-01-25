@@ -101,7 +101,6 @@ func ProcessPayload(e []github.Event, u User) ([]ActivityPayload, error) {
 				if val, ok := issue["closed_at"].(string); ok {
 					payload.ClosedAt = val
 				}
-
 			}
 			activityPayloads = append(activityPayloads, payload)
 
@@ -111,17 +110,8 @@ func ProcessPayload(e []github.Event, u User) ([]ActivityPayload, error) {
 				payload.CreateIssueComment = true
 			}
 			if issue, ok := rawPayload["issue"].(map[string]interface{}); ok {
-				if val, ok := issue["number"].(float64); ok {
-					payload.Number = int(val)
-				}
-			}
-			if comment, ok := rawPayload["comment"].(map[string]interface{}); ok {
-				if val, ok := comment["title"].(string); ok {
-					payload.Title = val
-				}
-				if val, ok := comment["body"].(string); ok {
-					payload.Body = val
-				}
+				payload.Number = int(issue["number"].(float64))
+				payload.Title = issue["title"].(string)
 			}
 			activityPayloads = append(activityPayloads, payload)
 		}
