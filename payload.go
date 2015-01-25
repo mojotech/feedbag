@@ -7,6 +7,10 @@ import (
 )
 
 type ActivityPayload struct {
+	Id         int64   `json:"id"`
+	GithubId   string  `json:"github_id"`
+	RawPayload RawJson `json:"-"`
+
 	EventType string `json:"event_type"`
 
 	//Events
@@ -25,16 +29,26 @@ type ActivityPayload struct {
 	MergedAt  string `json:"merged_at"`
 }
 
+func (p *ActivityPayload) Create() error {
+	err := dbmap.Insert(p)
+	return err
+}
+
 func ProcessPayload(e []github.Event, u User) ([]ActivityPayload, error) {
 	activityPayloads := []ActivityPayload{}
 
 	for _, event := range e {
 		payload := ActivityPayload{}
 
+		payload.GithubId = *event.ID
+
 		rawPayload := make(map[string]interface{})
 		if err := json.Unmarshal(*event.RawPayload, &rawPayload); err != nil {
 			panic(err.Error())
 		}
+
+		//Save the raw payload
+		payload.RawPayload = rawPayload
 
 		switch *event.Type {
 		case "PullRequestEvent":
@@ -72,6 +86,9 @@ func ProcessPayload(e []github.Event, u User) ([]ActivityPayload, error) {
 					payload.MergedAt = val
 				}
 			}
+
+			// Save the paylod to the db events table
+			payload.Create()
 			activityPayloads = append(activityPayloads, payload)
 
 		case "IssueEvent":
