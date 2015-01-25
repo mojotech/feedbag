@@ -1,5 +1,5 @@
 angular.module "feedBag"
-  .controller "MainCtrl", ($scope) ->
+  .controller "MainCtrl", ($scope, socket) ->
     $scope.awesomeThings = [
       {
         'title': 'AngularJS',
@@ -68,5 +68,5 @@ angular.module "feedBag"
         'logo': 'coffeescript.png'
       }
     ]
-    angular.forEach $scope.awesomeThings, (awesomeThing) ->
-      awesomeThing.rank = Math.random()
+
+    socket.syncUpdates "activity", $scope.awesomeThings
