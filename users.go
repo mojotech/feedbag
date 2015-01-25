@@ -1,7 +1,5 @@
 package main
 
-import "log"
-
 type User struct {
 	Id          int64   `json:"id"`
 	Name        string  `json:"name"`
@@ -19,9 +17,6 @@ type UserList []User
 
 func (u *UserList) List() error {
 	_, err := dbmap.Select(u, "SELECT * FROM USERS ORDER BY CreatedAt DESC")
-	if err != nil {
-		log.Fatal(err)
-	}
 	return err
 }
 
@@ -31,9 +26,10 @@ func (u *User) Create() error {
 
 	// run the DB insert function
 	err := dbmap.Insert(u)
-	if err != nil {
-		return err
-	}
+	return err
+}
 
-	return nil
+func (u *User) GetByUsername(n string) error {
+	err := dbmap.SelectOne(u, "SELECT * FROM users WHERE username=$1", n)
+	return err
 }

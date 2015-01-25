@@ -1,7 +1,8 @@
 package main
 
 import (
-	"fmt"
+	"database/sql"
+	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -34,28 +35,37 @@ func getUsers(c *gin.Context) {
 }
 
 func providerCallback(c *gin.Context) {
+	// Run user auth using the gothic library
 	user, err := gothic.CompleteUserAuth(c.Writer, c.Request)
+	checkErr(err, "Failed to authenicate user")
+
+	u := User{}
+
+	err = u.GetByUsername(user.RawData["login"].(string))
 	if err != nil {
-		fmt.Fprintln(c.Writer, err)
-		return
+		if err != sql.ErrNoRows {
+			log.Fatalln("Failed to read from user table", err)
+			return
+		}
 	}
 
 	//Add user to the user table
-	u := User{
-		Name:        user.Name,
-		Username:    user.RawData["login"].(string),
-		AvatarUrl:   user.AvatarURL,
-		AccessToken: user.AccessToken,
-		ProfileUrl:  user.RawData["url"].(string),
-		Email:       user.Email,
-		Joined:      user.RawData["created_at"].(string),
-		Raw:         user.RawData,
-	}
+	u.Name = user.Name
+	u.Username = user.RawData["login"].(string)
+	u.AvatarUrl = user.AvatarURL
+	u.AccessToken = user.AccessToken
+	u.ProfileUrl = user.RawData["url"].(string)
+	u.Email = user.Email
+	u.Joined = user.RawData["created_at"].(string)
+	u.Raw = user.RawData
 
-	err = u.Create()
-	if err != nil {
-		c.JSON(200, gin.H{"error": err})
-		return
+	if u.Id != 0 {
+		u.UpdateTime()
+		_, err = dbmap.Update(&u)
+		checkErr(err, "Failed to update user row")
+	} else {
+		err = u.Create()
+		checkErr(err, "Failed to create new user row")
 	}
 
 	c.JSON(200, u)
