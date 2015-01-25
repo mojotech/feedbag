@@ -8,16 +8,22 @@ import (
 	"text/template"
 
 	"github.com/gin-gonic/gin"
+	"github.com/googollee/go-socket.io"
 	"github.com/markbates/goth/gothic"
 )
 
-func setupRoutes(r *gin.Engine) {
+func SetupRoutes(r *gin.Engine, s *socketio.Server) {
 	//Oauth Authenticaton and Callbacks
 	r.GET("/auth/github/callback", providerCallback)
 	r.GET("/auth/github", providerAuth)
 
 	//Index Route
 	r.GET("/", indexHandler)
+
+	//Socket.io Route
+	r.GET("/socket.io/", func(c *gin.Context) {
+		s.ServeHTTP(c.Writer, c.Request)
+	})
 
 	//Api endpoints
 	a := r.Group("api")

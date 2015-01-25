@@ -2,21 +2,34 @@ package main
 
 import (
 	"fmt"
+	"strconv"
 	"time"
 
 	"code.google.com/p/goauth2/oauth"
 	"github.com/google/go-github/github"
 )
 
-func init() {
+func StartExistingUsers(c chan<- []Activity) error {
 	fmt.Println("Starting go routines")
+	u := UserList{}
+
+	err := u.List()
+	if err != nil {
+		return err
+	}
+
+	for _, user := range u {
+		StartUserRoutine(user, c)
+	}
+
+	return nil
 }
 
-func StartGoRoutine(u *User) {
-	go userRoutine(u)
+func StartUserRoutine(u User, c chan<- []Activity) {
+	go userRoutine(u, c)
 }
 
-func userRoutine(u *User) error {
+func userRoutine(u User, c chan<- []Activity) error {
 	t := &oauth.Transport{
 		Token: &oauth.Token{AccessToken: u.AccessToken},
 	}
@@ -27,17 +40,25 @@ func userRoutine(u *User) error {
 	opts := github.ListOptions{1, 50}
 
 	for {
-		event, _, err := client.Activity.ListEvents(&opts)
+		events, resp, err := client.Activity.ListEventsPerformedByUser(u.Username, false, &opts)
 		if err != nil {
 			panic(err)
 		}
 
-		//DEBUG: print out events
-		fmt.Println(event)
+		activityPayload, err := ProcessPayload(events, u)
+		activities := ActivityParser(activityPayload)
 
-		// Wait 5 seconds after events are recieved and
-		// start again
-		time.Sleep(5 * time.Second)
+		fmt.Println(activities)
+		c <- activities
+
+		// Wait as long as the X-Poll-Interval header says to
+		interval, err := strconv.ParseInt(resp.Header["X-Poll-Interval"][0], 10, 8)
+		if err != nil {
+			// if strconv failed for whatever reason, use the default X-Poll-Interval value of 60
+			time.Sleep(60 * time.Second)
+		} else {
+			time.Sleep(time.Duration(interval) * time.Second)
+		}
 	}
 
 	panic("Shouldn't be here")

@@ -13,10 +13,11 @@ import (
 )
 
 type Template struct {
-	Id       string `json:"id"`
-	Name     string `json:"name"`
-	Event    string `json:"event"`
-	Template []byte
+	Id        string `json:"id"`
+	Name      string `json:"name"`
+	Event     string `json:"event"`
+	Condition string `json:"condition"`
+	Template  []byte
 }
 
 func ParseTemplatesDir(templatesDir string) ([]*Template, error) {

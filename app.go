@@ -26,7 +26,6 @@ var (
 func main() {
 	//Setup gin
 	r := gin.Default()
-	setupRoutes(r)
 
 	// Close the database connection if we fail
 	defer dbmap.Db.Close()
@@ -35,6 +34,19 @@ func main() {
 	goth.UseProviders(
 		github.New(os.Getenv("GITHUB_KEY"), os.Getenv("GITHUB_SECRET"), "http://localhost:3000/auth/github/callback"),
 	)
+
+	// Setup Socket.io server and related activity fetching
+	socketServer, err := SetupSocketIO()
+	checkErr(err, "Problem starting socket.io server:")
+
+	SetupRoutes(r, socketServer)
+
+	activityChan := make(chan []Activity)
+	err = StartSocketPusher(socketServer, activityChan)
+	checkErr(err, "Problem starting socket goroutine:")
+
+	err = StartExistingUsers(activityChan)
+	checkErr(err, "Problem starting user goroutines:")
 
 	//Configure port for server to run on
 	port := *configPort
