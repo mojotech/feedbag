@@ -21,6 +21,7 @@ var (
 	templatesDir = flag.String("templates", "./templates", "Path to your templates directory")
 	dbmap        = setupDb()
 	templates    = setupTemplates()
+	activityChan = make(chan []Activity)
 )
 
 func main() {
@@ -41,7 +42,6 @@ func main() {
 
 	SetupRoutes(r, socketServer)
 
-	activityChan := make(chan []Activity)
 	err = StartSocketPusher(socketServer, activityChan)
 	checkErr(err, "Problem starting socket goroutine:")
 
