@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"errors"
 	"log"
 
 	"github.com/googollee/go-socket.io"
@@ -42,5 +41,5 @@ func StartSocketPusher(s *socketio.Server, c <-chan []Activity) error {
 		}
 	}()
 
-	return errors.New("SocketPusher function failed early")
+	return nil
 }
