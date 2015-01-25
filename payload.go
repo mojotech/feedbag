@@ -113,6 +113,9 @@ func ProcessPayload(e []github.Event, u User) ([]ActivityPayload, error) {
 				payload.Number = int(issue["number"].(float64))
 				payload.Title = issue["title"].(string)
 			}
+			if comment, ok := rawPayload["comment"].(map[string]interface{}); ok {
+				payload.Body = comment["body"].(string)
+			}
 			activityPayloads = append(activityPayloads, payload)
 		}
 	}
