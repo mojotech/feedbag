@@ -1,4 +1,4 @@
-angular.module "feedBag", ['ngAnimate', 'ngSanitize', 'ngRoute', 'ngMaterial']
+angular.module "feedBag", ['ngAnimate', 'ngRoute', 'ui.bootstrap']
   .config ($routeProvider) ->
     $routeProvider
       .when "/",

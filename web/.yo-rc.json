@@ -12,10 +12,6 @@
         {
           "name": "angular-animate",
           "module": "ngAnimate"
-        },
-        {
-          "name": "angular-sanitize",
-          "module": "ngSanitize"
         }
       ],
       "jQuery": {
@@ -32,10 +28,16 @@
         "module": "ngRoute"
       },
       "ui": {
-        "name": "angular-material",
-        "version": "~0.5.1",
-        "key": "angular-material",
-        "module": "ngMaterial"
+        "name": "bootstrap-sass-official",
+        "version": "~3.3.1",
+        "key": "bootstrap",
+        "module": null
+      },
+      "bootstrapComponents": {
+        "name": "angular-bootstrap",
+        "version": "0.12.x",
+        "key": "ui-bootstrap",
+        "module": "ui.bootstrap"
       },
       "cssPreprocessor": {
         "key": "stylus",
@@ -51,16 +53,10 @@
         "version": "~2.2.0"
       },
       "htmlPreprocessor": {
-        "key": "jade",
-        "extension": "jade",
-        "module": "jade",
-        "version": "~1.8.1"
-      },
-      "bootstrapComponents": {
-        "name": null,
-        "version": null,
-        "key": null,
-        "module": null
+        "key": "none",
+        "extension": "html",
+        "module": null,
+        "version": null
       },
       "foundationComponents": {
         "name": null,
