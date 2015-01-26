@@ -20,6 +20,9 @@ func SetupRoutes(r *gin.Engine, s *socketio.Server) {
 	//Index Route
 	r.GET("/", indexHandler)
 
+	//Template Route
+	r.GET("/templates", templateHandler)
+
 	//Socket.io Route
 	r.GET("/socket.io/", func(c *gin.Context) {
 		s.ServeHTTP(c.Writer, c.Request)
@@ -42,6 +45,11 @@ func indexHandler(c *gin.Context) {
 		panic(err)
 	}
 	t.Execute(c.Writer, Templates)
+}
+
+func templateHandler(c *gin.Context) {
+	Templates = getTemplates()
+	c.JSON(200, Templates)
 }
 
 func getActivity(c *gin.Context) {
