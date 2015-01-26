@@ -41,7 +41,7 @@ func indexHandler(c *gin.Context) {
 	if err != nil {
 		panic(err)
 	}
-	t.Execute(c.Writer, templates)
+	t.Execute(c.Writer, Templates)
 }
 
 func getActivity(c *gin.Context) {
