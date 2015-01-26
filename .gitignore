@@ -2,3 +2,5 @@ gin-bin
 feedbag
 .env
 *.bin
+bower_components/
+node_modeles/

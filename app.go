@@ -14,19 +14,26 @@ import (
 	"github.com/markbates/goth"
 	"github.com/markbates/goth/providers/github"
 	_ "github.com/mattn/go-sqlite3"
+	"github.com/tommy351/gin-cors"
 )
 
 var (
 	configPort   = flag.String("port", "3000", "Port to run the server on")
 	templatesDir = flag.String("templates", "./templates", "Path to your templates directory")
+	indexFile    = flag.String("index-file", "./public/index.html", "Path to the index template")
 	dbmap        = setupDb()
 	templates    = setupTemplates()
 	activityChan = make(chan []Activity)
 )
 
 func main() {
+	//Parse flags
+	flag.Parse()
+
 	//Setup gin
 	r := gin.Default()
+
+	r.Use(cors.Middleware(cors.Options{AllowCredentials: true}))
 
 	// Close the database connection if we fail
 	defer dbmap.Db.Close()
