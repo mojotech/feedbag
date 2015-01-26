@@ -87,14 +87,6 @@ func ProcessPayload(e []github.Event, u User) ([]ActivityPayload, error) {
 				}
 			}
 
-			// Save the paylod to the db events table
-			err := payload.Create()
-			if err != nil {
-				//Assuming fail due to the unique constraint
-			} else {
-				activityPayloads = append(activityPayloads, payload)
-			}
-
 		case "IssueEvent":
 			if val, ok := rawPayload["action"]; ok && val == "opened" {
 				payload.EventType = "OpenIssue"
@@ -123,7 +115,6 @@ func ProcessPayload(e []github.Event, u User) ([]ActivityPayload, error) {
 					payload.ClosedAt = val
 				}
 			}
-			activityPayloads = append(activityPayloads, payload)
 
 		case "IssueCommentEvent":
 			if val, ok := rawPayload["action"]; ok && val == "created" {
@@ -137,8 +128,16 @@ func ProcessPayload(e []github.Event, u User) ([]ActivityPayload, error) {
 			if comment, ok := rawPayload["comment"].(map[string]interface{}); ok {
 				payload.Body = comment["body"].(string)
 			}
+
+		} //End Switch
+
+		// Save the paylod to the db events table
+		err := payload.Create()
+		//Assuming fail due to the unique constraint
+		if err == nil {
 			activityPayloads = append(activityPayloads, payload)
 		}
+
 	}
 
 	return activityPayloads, nil
