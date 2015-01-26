@@ -88,8 +88,12 @@ func ProcessPayload(e []github.Event, u User) ([]ActivityPayload, error) {
 			}
 
 			// Save the paylod to the db events table
-			payload.Create()
-			activityPayloads = append(activityPayloads, payload)
+			err := payload.Create()
+			if err != nil {
+				//Assuming fail due to the unique constraint
+			} else {
+				activityPayloads = append(activityPayloads, payload)
+			}
 
 		case "IssueEvent":
 			if val, ok := rawPayload["action"]; ok && val == "opened" {

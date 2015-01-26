@@ -125,8 +125,8 @@ func setupDb() *gorp.DbMap {
 	// add a table, setting the table name to 'posts' and
 	// specifying that the Id property is an auto incrementing PK
 	dbmap.AddTableWithName(User{}, "users").SetKeys(true, "Id")
-	dbmap.AddTableWithName(ActivityPayload{}, "events").SetKeys(true, "Id")
 	dbmap.AddTableWithName(Activity{}, "activities").SetKeys(true, "Id")
+	dbmap.AddTableWithName(ActivityPayload{}, "events").SetKeys(true, "Id").ColMap("GithubId").SetUnique(true)
 
 	// create the table. in a production system you'd generally
 	// use a migration tool, or create the tables via scripts
