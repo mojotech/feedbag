@@ -20,7 +20,6 @@ import (
 var (
 	configPort   = flag.String("port", "3000", "Port to run the server on")
 	templatesDir = flag.String("templates", "./templates", "Path to your templates directory")
-	indexFile    = flag.String("index-file", "./public/index.html", "Path to the index template")
 	dbmap        = setupDb()
 	Templates    = getTemplates()
 	activityChan = make(chan []Activity)

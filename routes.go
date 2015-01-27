@@ -4,8 +4,6 @@ import (
 	"database/sql"
 	"log"
 	"net/http"
-	"os"
-	"text/template"
 
 	"github.com/gin-gonic/gin"
 	"github.com/googollee/go-socket.io"
@@ -16,9 +14,6 @@ func SetupRoutes(r *gin.Engine, s *socketio.Server) {
 	//Oauth Authenticaton and Callbacks
 	r.GET("/auth/github/callback", providerCallback)
 	r.GET("/auth/github", providerAuth)
-
-	//Index Route
-	r.GET("/", indexHandler)
 
 	//Template Route
 	r.GET("/templates", templateHandler)
@@ -32,19 +27,6 @@ func SetupRoutes(r *gin.Engine, s *socketio.Server) {
 	a := r.Group("api")
 	a.GET("/activity", getActivity)
 	a.GET("/users", getUsers)
-}
-
-func indexHandler(c *gin.Context) {
-	//Configure default index file location
-	indexTemplate := *indexFile
-	if len(os.Getenv("INDEX_FILE")) > 0 {
-		indexTemplate = os.Getenv("INDEX_FILE")
-	}
-	t, err := template.ParseFiles(indexTemplate)
-	if err != nil {
-		panic(err)
-	}
-	t.Execute(c.Writer, Templates)
 }
 
 func templateHandler(c *gin.Context) {
