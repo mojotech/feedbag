@@ -12,3 +12,11 @@ angular.module "feedBag", [
       .otherwise
         redirectTo: "/"
 
+angular.module("feedBag").run ($http, $templateCache) ->
+  templates = $http
+    method: "get"
+    url: "templates"
+
+  templates.success (templates) ->
+    templates.forEach (res) ->
+      $templateCache.put(res.id, res.template)

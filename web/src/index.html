@@ -55,9 +55,5 @@
     <!-- endinject -->
     <!-- endbuild -->
 
-    {{range $template := .}}
-    <script id="{{$template.Id}}" type="text/ng-template">{{printf "%s" $template.Template}}</script>
-    {{end}}
-
   </body>
 </html>
