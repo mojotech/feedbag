@@ -17,7 +17,7 @@ type Template struct {
 	Name      string `json:"name"`
 	Event     string `json:"event"`
 	Condition string `json:"condition"`
-	Template  []byte
+	Template  string `json:"template"`
 }
 
 func ParseTemplatesDir(templatesDir string) ([]*Template, error) {
@@ -111,7 +111,7 @@ func parseTemplate(dir string, file os.FileInfo) (*Template, error) {
 
 			dom = append(dom, line...)
 		}
-		template.Template = dom
+		template.Template = string(dom)
 	}
 
 	return template, err

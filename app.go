@@ -22,7 +22,7 @@ var (
 	templatesDir = flag.String("templates", "./templates", "Path to your templates directory")
 	indexFile    = flag.String("index-file", "./public/index.html", "Path to the index template")
 	dbmap        = setupDb()
-	templates    = setupTemplates()
+	Templates    = getTemplates()
 	activityChan = make(chan []Activity)
 )
 
@@ -143,7 +143,7 @@ func setupDb() *gorp.DbMap {
 	return dbmap
 }
 
-func setupTemplates() []*Template {
+func getTemplates() []*Template {
 	// Parse templates
 	templates, err := ParseTemplatesDir(*templatesDir)
 	if err != nil {

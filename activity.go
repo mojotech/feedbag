@@ -34,7 +34,7 @@ func ActivityParser(p []ActivityPayload) []Activity {
 	activities := []Activity{}
 
 	for _, payload := range p {
-		for _, template := range templates {
+		for _, template := range Templates {
 			activity := Activity{}
 
 			if CheckEventType(template.Event, payload) && ValidateConditional(template.Condition, payload) {
