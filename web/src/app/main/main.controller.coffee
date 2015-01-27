@@ -5,8 +5,6 @@ angular.module "feedBag"
     activity = $http
       method: "get",
       url: "api/activity",
-      params:
-        action: "get"
 
     activity.success (activities, status) ->
       $scope.Activities = activities
