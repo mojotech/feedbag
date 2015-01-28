@@ -4,3 +4,4 @@ feedbag
 *.bin
 bower_components/
 node_modeles/
+Godeps/_workspace
