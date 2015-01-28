@@ -10,7 +10,7 @@ An optional `condition` field can be added to further specify when the template 
 0.0.1
 
 
-[![GoDoc](https://godoc.org/github.com/mojotech/feedbag?status.svg)](https://godoc.org/github.com/mojotech/feedbag) [![Build Status](https://travis-ci.org/mojotech/feedbag.svg)](https://travis-ci.org/mojotech/feedbag) [![Coverage](http://gocover.io/_badge/github.com/mojotech/feedbag)](http://gocover.io/github.com/mojotech/feedbag) [![Stories in
+[![GoDoc](https://godoc.org/github.com/mojotech/feedbag?status.svg)](https://godoc.org/github.com/mojotech/feedbag) [![Go Walker](http://gowalker.org/api/v1/badge)](https://gowalker.org/github.com/mojotech/feedbag) [![Build Status](https://travis-ci.org/mojotech/feedbag.svg)](https://travis-ci.org/mojotech/feedbag) [![Coverage](http://gocover.io/_badge/github.com/mojotech/feedbag)](http://gocover.io/github.com/mojotech/feedbag) [![Stories in
 Ready](https://badge.waffle.io/mojotech/FeedBag.svg?label=ready&title=Ready)](http://waffle.io/mojotech/FeedBag)
 
 [![Throughput Graph](https://graphs.waffle.io/mojotech/feedbag/throughput.svg)](https://waffle.io/mojotech/feedbag/metrics)
