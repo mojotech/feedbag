@@ -1,0 +1,82 @@
+{
+  "action": "created",
+  "issue": {
+    "url": "https://api.github.com/repos/mojotech/feedbag/issues/38",
+    "labels_url": "https://api.github.com/repos/mojotech/feedbag/issues/38/labels{/name}",
+    "comments_url": "https://api.github.com/repos/mojotech/feedbag/issues/38/comments",
+    "events_url": "https://api.github.com/repos/mojotech/feedbag/issues/38/events",
+    "html_url": "https://github.com/mojotech/feedbag/pull/38",
+    "id": 56838341,
+    "number": 38,
+    "title": "Title",
+    "user": {
+      "login": "begizi",
+      "id": 3143166,
+      "avatar_url": "https://avatars.githubusercontent.com/u/3143166?v=3",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/begizi",
+      "html_url": "https://github.com/begizi",
+      "followers_url": "https://api.github.com/users/begizi/followers",
+      "following_url": "https://api.github.com/users/begizi/following{/other_user}",
+      "gists_url": "https://api.github.com/users/begizi/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/begizi/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/begizi/subscriptions",
+      "organizations_url": "https://api.github.com/users/begizi/orgs",
+      "repos_url": "https://api.github.com/users/begizi/repos",
+      "events_url": "https://api.github.com/users/begizi/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/begizi/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "labels": [
+      {
+        "url": "https://api.github.com/repos/mojotech/feedbag/labels/in%20progress",
+        "name": "in progress",
+        "color": "ededed"
+      }
+    ],
+    "state": "open",
+    "locked": false,
+    "assignee": null,
+    "milestone": null,
+    "comments": 1,
+    "created_at": "2015-02-06T17:03:21Z",
+    "updated_at": "2015-02-06T17:32:27Z",
+    "closed_at": null,
+    "pull_request": {
+      "url": "https://api.github.com/repos/mojotech/feedbag/pulls/38",
+      "html_url": "https://github.com/mojotech/feedbag/pull/38",
+      "diff_url": "https://github.com/mojotech/feedbag/pull/38.diff",
+      "patch_url": "https://github.com/mojotech/feedbag/pull/38.patch"
+    },
+    "body": null
+  },
+  "comment": {
+    "url": "https://api.github.com/repos/mojotech/feedbag/issues/comments/73278619",
+    "html_url": "https://github.com/mojotech/feedbag/pull/38#issuecomment-73278619",
+    "issue_url": "https://api.github.com/repos/mojotech/feedbag/issues/38",
+    "id": 73278619,
+    "user": {
+      "login": "begizi",
+      "id": 3143166,
+      "avatar_url": "https://avatars.githubusercontent.com/u/3143166?v=3",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/begizi",
+      "html_url": "https://github.com/begizi",
+      "followers_url": "https://api.github.com/users/begizi/followers",
+      "following_url": "https://api.github.com/users/begizi/following{/other_user}",
+      "gists_url": "https://api.github.com/users/begizi/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/begizi/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/begizi/subscriptions",
+      "organizations_url": "https://api.github.com/users/begizi/orgs",
+      "repos_url": "https://api.github.com/users/begizi/repos",
+      "events_url": "https://api.github.com/users/begizi/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/begizi/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "created_at": "2015-02-06T17:32:27Z",
+    "updated_at": "2015-02-06T17:32:27Z",
+    "body": "Body"
+  }
+}
