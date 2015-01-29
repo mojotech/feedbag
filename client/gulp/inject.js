@@ -19,7 +19,7 @@ gulp.task('inject', ['styles', 'scripts'], function () {
     '{' + paths.src + ',' + paths.tmp + '/serve}/{app,components}/**/*.js',
     '!' + paths.src + '/{app,components}/**/*.spec.js',
     '!' + paths.src + '/{app,components}/**/*.mock.js'
-  ]).pipe($.angularFilesort());
+  ]);
 
   var injectOptions = {
     ignorePath: [paths.src, paths.tmp + '/serve'],
