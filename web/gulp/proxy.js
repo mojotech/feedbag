@@ -48,7 +48,10 @@ function proxyMiddleware(req, res, next) {
    * for your needs. If you can, you could also check on a context in the url which
    * may be more reliable but can't be generic.
    */
-  if (/\.(html|css|js|png|jpg|jpeg|gif|ico|xml|rss|txt|eot|svg|ttf|woff|cur|woff2|map)(\?((r|v|rel|rev)=[\-\.\w]*)?)?$/.test(req.url)) {
+  var extension = /\.(html|css|js|png|jpg|jpeg|gif|ico|xml|rss|txt|eot|svg|ttf|woff|cur|woff2|map)(\?((r|v|rel|rev)=[\-\.\w]*)?)?$/.test(req.url)
+  // Ensure that the proxy serves up the index page from gulp
+  var index = req.url == "/"
+  if (extension || index) {
     next();
   } else {
     proxy.web(req, res);

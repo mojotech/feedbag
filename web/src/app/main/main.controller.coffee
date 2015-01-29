@@ -1,5 +1,12 @@
 angular.module "feedBag"
-  .controller "MainCtrl", ($scope, socket) ->
+  .controller "MainCtrl", ($scope, $http, socket) ->
     $scope.Activities = []
 
-    socket.syncUpdates "activity", $scope.Activities, -> console.log arguments
+    activity = $http
+      method: "get",
+      url: "api/activity",
+
+    activity.success (activities, status) ->
+      $scope.Activities = activities
+
+    socket.syncUpdates "activity", $scope.Activities

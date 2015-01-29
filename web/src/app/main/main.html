@@ -1,8 +1,5 @@
-<div class="col-sm-6 col-md-4" ng-repeat="activity in Activities | orderBy:'created_at'">
-  <div class="thumbnail">
-    <div class="caption">
-      <h3>{{activity.event.title}}</h3>
-      <p>{{activity.event.body}}</p>
-    </div>
+<div class="container-fluid">
+  <div class="col-sm-6 col-md-4" ng-repeat="activity in Activities | orderBy:'created_at'">
+    <widget data="activity" class="widget"></widget>
   </div>
 </div>
