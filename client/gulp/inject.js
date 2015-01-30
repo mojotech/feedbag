@@ -15,12 +15,6 @@ gulp.task('inject', ['styles', 'scripts'], function () {
     '!' + paths.tmp + '/serve/app/vendor.css'
   ], { read: false });
 
-  var injectScripts = gulp.src([
-    '{' + paths.src + ',' + paths.tmp + '/serve}/{app,components}/**/*.js',
-    '!' + paths.src + '/{app,components}/**/*.spec.js',
-    '!' + paths.src + '/{app,components}/**/*.mock.js'
-  ]);
-
   var injectOptions = {
     ignorePath: [paths.src, paths.tmp + '/serve'],
     addRootSlash: false
@@ -33,7 +27,6 @@ gulp.task('inject', ['styles', 'scripts'], function () {
 
   return gulp.src(paths.src + '/*.html')
     .pipe($.inject(injectStyles, injectOptions))
-    .pipe($.inject(injectScripts, injectOptions))
     .pipe(wiredep(wiredepOptions))
     .pipe(gulp.dest(paths.tmp + '/serve'));
 
