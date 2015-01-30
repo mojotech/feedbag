@@ -37,7 +37,7 @@ func Start(port, templatesDir string) error {
 
 	// Setup Goth Authentication
 	goth.UseProviders(
-		github.New(os.Getenv("GITHUB_KEY"), os.Getenv("GITHUB_SECRET"), "http://localhost:3000/auth/github/callback"),
+		github.New(os.Getenv("GITHUB_KEY"), os.Getenv("GITHUB_SECRET"), "http://localhost:3000/auth/github/callback", "repo", "user:email"),
 	)
 
 	// Setup Socket.io server and related activity fetching
