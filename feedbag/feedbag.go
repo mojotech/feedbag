@@ -1,10 +1,9 @@
-package main
+package feedbag
 
 import (
 	"database/sql"
 	"encoding/json"
 	"errors"
-	"flag"
 	"fmt"
 	"log"
 	"os"
@@ -18,24 +17,23 @@ import (
 )
 
 var (
-	configPort   = flag.String("port", "3000", "Port to run the server on")
-	templatesDir = flag.String("templates", "./templates", "Path to your templates directory")
 	dbmap        = setupDb()
-	Templates    = getTemplates()
 	activityChan = make(chan []Activity)
+	TemplatesDir string
+	Templates    []*Template
 )
 
-func main() {
-	//Parse flags
-	flag.Parse()
+//Raw Json type for Type Converter
+type RawJson map[string]interface{}
 
-	//Setup gin
-	r := gin.Default()
+type TypeConverter struct{}
 
-	r.Use(cors.Middleware(cors.Options{AllowCredentials: true}))
-
-	// Close the database connection if we fail
+func Start(port, templatesDir string) error {
 	defer dbmap.Db.Close()
+
+	// Process our templates
+	TemplatesDir = templatesDir
+	Templates = getTemplates(TemplatesDir)
 
 	// Setup Goth Authentication
 	goth.UseProviders(
@@ -44,30 +42,34 @@ func main() {
 
 	// Setup Socket.io server and related activity fetching
 	socketServer, err := SetupSocketIO()
-	checkErr(err, "Problem starting socket.io server:")
-
-	SetupRoutes(r, socketServer)
-
-	err = StartSocketPusher(socketServer, activityChan)
-	checkErr(err, "Problem starting socket goroutine:")
-
-	err = StartExistingUsers(activityChan)
-	checkErr(err, "Problem starting user goroutines:")
-
-	//Configure port for server to run on
-	port := *configPort
-	if len(os.Getenv("PORT")) > 0 {
-		port = os.Getenv("PORT")
+	if err != nil {
+		return err
 	}
 
-	// Listen and Serve on port from ENV or flag
+	err = StartSocketPusher(socketServer, activityChan)
+	if err != nil {
+		return err
+	}
+
+	err = StartExistingUsers(activityChan)
+	if err != nil {
+		return err
+	}
+
+	// Start up gin and its friends
+	r := gin.Default()
+	r.Use(cors.Middleware(cors.Options{AllowCredentials: true}))
+	SetupRoutes(r, socketServer)
 	r.Run(fmt.Sprintf(":%s", port))
+
+	return nil
 }
 
-//Raw Json type for Type Converter
-type RawJson map[string]interface{}
-
-type TypeConverter struct{}
+func checkErr(err error, msg string) {
+	if err != nil {
+		log.Fatalln(msg, err)
+	}
+}
 
 func (me TypeConverter) ToDb(val interface{}) (interface{}, error) {
 	switch t := val.(type) {
@@ -120,7 +122,7 @@ func (me TypeConverter) FromDb(target interface{}) (gorp.CustomScanner, bool) {
 func setupDb() *gorp.DbMap {
 	// connect to db using standard Go database/sql API
 	// use whatever database/sql driver you wish
-	db, err := sql.Open("sqlite3", "./tmp/feedbag.bin")
+	db, err := sql.Open("sqlite3", "./feedbag.bin")
 	checkErr(err, "sql.Open failed")
 
 	// construct a gorp DbMap
@@ -140,20 +142,4 @@ func setupDb() *gorp.DbMap {
 	checkErr(err, "Create tables failed")
 
 	return dbmap
-}
-
-func getTemplates() []*Template {
-	// Parse templates
-	templates, err := ParseTemplatesDir(*templatesDir)
-	if err != nil {
-		checkErr(err, "Problem parsing templates")
-	}
-	log.Println(fmt.Sprintf("Found %d valid templates", len(templates)))
-	return templates
-}
-
-func checkErr(err error, msg string) {
-	if err != nil {
-		log.Fatalln(msg, err)
-	}
 }

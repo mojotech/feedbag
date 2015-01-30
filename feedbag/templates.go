@@ -1,4 +1,4 @@
-package main
+package feedbag
 
 import (
 	"bufio"
@@ -115,4 +115,14 @@ func parseTemplate(dir string, file os.FileInfo) (*Template, error) {
 	}
 
 	return template, err
+}
+
+func getTemplates(templatesDir string) []*Template {
+	// Parse templates
+	templates, err := ParseTemplatesDir(templatesDir)
+	if err != nil {
+		checkErr(err, "Problem parsing templates")
+	}
+	log.Println(fmt.Sprintf("Found %d valid templates", len(templates)))
+	return templates
 }
