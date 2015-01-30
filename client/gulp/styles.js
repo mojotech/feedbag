@@ -10,15 +10,15 @@ gulp.task('styles', function () {
 
 
   var injectFiles = gulp.src([
-    paths.src + '/{app,components}/**/*.styl',
-    '!' + paths.src + '/app/app.styl',
-    '!' + paths.src + '/app/vendor.styl'
+    paths.src + '/assets/styles/helpers/**/*.styl', //Ensure that helpers get included first
+    paths.src + '/assets/styles/**/*.styl',
+    '!' + paths.src + '/assets/styles/main.styl'
   ], { read: false });
 
   var injectOptions = {
     transform: function(filePath) {
-      filePath = filePath.replace(paths.src + '/app/', '');
-      filePath = filePath.replace(paths.src + '/components/', '../components/');
+      filePath = filePath.replace(paths.src + '/assets/styles/', '');
+      console.log(filePath);
       return '@import \'' + filePath + '\';';
     },
     starttag: '// injector',
@@ -26,11 +26,10 @@ gulp.task('styles', function () {
     addRootSlash: false
   };
 
-  var indexFilter = $.filter('app.styl');
+  var indexFilter = $.filter('main.styl');
 
   return gulp.src([
-    paths.src + '/app/app.styl',
-    paths.src + '/app/vendor.styl'
+    paths.src + '/assets/styles/main.styl'
   ])
     .pipe(indexFilter)
     .pipe($.inject(injectFiles, injectOptions))
@@ -42,5 +41,5 @@ gulp.task('styles', function () {
       console.error(err.toString());
       this.emit('end');
     })
-    .pipe(gulp.dest(paths.tmp + '/serve/app/'));
+    .pipe(gulp.dest(paths.tmp + '/serve/assets/styles'));
 });

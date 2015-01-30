@@ -17,9 +17,9 @@ function runTests (singleRun, done) {
   });
 
   var testFiles = bowerDeps.js.concat([
-    paths.tmp + '/serve/{app,components}/**/*.js',
-    paths.src + '/{app,components}/**/*.spec.js',
-    paths.src + '/{app,components}/**/*.mock.js'
+    paths.tmp + '/serve/app/**/*.js',
+    paths.src + '/app/**/*.spec.js',
+    paths.src + '/app/**/*.mock.js'
   ]);
 
   gulp.src(testFiles)
