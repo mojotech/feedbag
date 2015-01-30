@@ -1,7 +1,6 @@
 angular.module "feedBag", [
   'ngAnimate',
   'ngRoute',
-  'ui.bootstrap',
   'btford.socket-io'
 ]
   .config ($routeProvider) ->
