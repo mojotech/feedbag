@@ -11,7 +11,7 @@ gulp.task('styles', function () {
 
   var injectFiles = gulp.src([
     paths.src + '/{app,components}/**/*.styl',
-    '!' + paths.src + '/app/index.styl',
+    '!' + paths.src + '/app/app.styl',
     '!' + paths.src + '/app/vendor.styl'
   ], { read: false });
 
@@ -26,10 +26,10 @@ gulp.task('styles', function () {
     addRootSlash: false
   };
 
-  var indexFilter = $.filter('index.styl');
+  var indexFilter = $.filter('app.styl');
 
   return gulp.src([
-    paths.src + '/app/index.styl',
+    paths.src + '/app/app.styl',
     paths.src + '/app/vendor.styl'
   ])
     .pipe(indexFilter)

@@ -12,14 +12,14 @@ var coffeeify = require('coffeeify')
 var browserifyTransform = ['coffeeify'];
 
 gulp.task('scripts', function () {
-  return gulp.src(paths.src + '/app/main.coffee', {read: false})
+  return gulp.src(paths.src + '/app/app.coffee', {read: false})
     .pipe($.coffeelint())
     .pipe($.coffeelint.reporter())
     .pipe(browserify({
       transform: browserifyTransform,
       extensions: ['.coffee'],
     }))
-    .pipe($.rename('main.js'))
+    .pipe($.rename('app.js'))
     .pipe(gulp.dest(paths.tmp + '/serve/'))
     .pipe($.size());
 });
