@@ -1,8 +1,12 @@
-package main
+package main_test
 
-import "testing"
+import (
+	"testing"
 
-func TestParseTemplatesDir(t *testing.T) {
+	feedbag "github.com/mojotech/feedbag"
+)
+
+func Test_ParseTemplatesDir(t *testing.T) {
 	cases := []struct {
 		dir        string
 		validCount int
@@ -12,7 +16,7 @@ func TestParseTemplatesDir(t *testing.T) {
 	}
 
 	for _, test := range cases {
-		templates, err := ParseTemplatesDir(test.dir)
+		templates, err := feedbag.ParseTemplatesDir(test.dir)
 		if test.validCount != len(templates) {
 			t.Errorf("ParseTemplatesDir expected %d valid templates but found %d in dir: %s", test.validCount, len(templates), test.dir)
 		}
