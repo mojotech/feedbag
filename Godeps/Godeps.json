@@ -1,5 +1,5 @@
 {
-	"ImportPath": "github.com/gophergala/FeedBag",
+	"ImportPath": "github.com/mojotech/feedbag",
 	"GoVersion": "go1.4",
 	"Deps": [
 		{
@@ -56,11 +56,23 @@
 		},
 		{
 			"ImportPath": "github.com/markbates/goth",
-			"Rev": "58040cbbd0f5cc5f46bb557eead3de64d8b398f8"
+			"Rev": "cacb0d7a40862f87481d7bf0dfe00771ddc60b82"
 		},
 		{
 			"ImportPath": "github.com/mattn/go-sqlite3",
 			"Rev": "d8029554b4cbb9a1c12311d307f4154b515566b4"
+		},
+		{
+			"ImportPath": "github.com/tommy351/gin-cors",
+			"Rev": "1a290fc71bb902dad18e23fc2d5782a06517bf71"
+		},
+		{
+			"ImportPath": "golang.org/x/net/context",
+			"Rev": "cbcac7bb8415db9b6cb4d1ebab1dc9afbd688b97"
+		},
+		{
+			"ImportPath": "golang.org/x/oauth2",
+			"Rev": "d8ba9d6c175596d5517faeeb51246a6e5f925e31"
 		}
 	]
 }
