@@ -1,9 +1,9 @@
-package main_test
+package feedbag_test
 
 import (
 	"testing"
 
-	feedbag "github.com/mojotech/feedbag"
+	"github.com/mojotech/feedbag/feedbag"
 )
 
 func Test_ParseTemplatesDir(t *testing.T) {
@@ -12,7 +12,7 @@ func Test_ParseTemplatesDir(t *testing.T) {
 		validCount int
 		throwsErr  bool
 	}{
-		{"./testing/templates", 2, false},
+		{"./../testing/templates", 2, false},
 	}
 
 	for _, test := range cases {

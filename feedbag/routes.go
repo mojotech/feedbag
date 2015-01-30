@@ -1,4 +1,4 @@
-package main
+package feedbag
 
 import (
 	"database/sql"
@@ -30,7 +30,7 @@ func SetupRoutes(r *gin.Engine, s *socketio.Server) {
 }
 
 func templateHandler(c *gin.Context) {
-	Templates = getTemplates()
+	Templates = getTemplates(TemplatesDir)
 	c.JSON(200, Templates)
 }
 
