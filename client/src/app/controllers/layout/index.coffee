@@ -40,6 +40,9 @@ class AppView extends Backbone.View
 
   render: ->
     @$el.html(@renderCollection())
+    new Isotope @el,
+      itemSelector: '.widget'
+      layoutMode: 'masonry'
     this
 
 module.exports = new AppView(collection: activityCollection)
