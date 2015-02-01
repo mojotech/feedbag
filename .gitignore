@@ -2,5 +2,5 @@ gin-bin
 .env
 *.bin
 bower_components/
-node_modeles/
+node_modules/
 Godeps/_workspace
