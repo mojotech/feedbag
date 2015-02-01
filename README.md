@@ -21,8 +21,7 @@ Feedbag uses a number of open source projects to work:
 
 * [Go] - Golang. The best ServerLanguage
 * [Gin] - The fastest full-featured web framework for Golang. Crystal clear.
-* [AngularJS] - HTML enhanced for web apps!
-* [Twitter Bootstrap] - great UI boilerplate for modern web apps
+* [Backbone] - Classic and effective.
 * [Gulp] - the streaming build system
 * [jQuery] - duh
 
@@ -55,9 +54,11 @@ Run the go server
 
 ```sh
 //Point to the location of the gulp index file
-$ export INDEX_FILE=web/.tmp/serve/index.html
+$ export GITHUB_KEY=[your github app key] GITHUB_SECRET=[your github app secret]
+
 $ go build
 $ ./feedbag
+
 //Or
 $ gin
 ```
@@ -65,7 +66,7 @@ $ gin
 Run the gulp task
 
 ```sh
-$ cd web
+$ cd client
 $ npm i
 $ bower i
 $ gulp serve
@@ -74,7 +75,6 @@ $ gulp serve
 ### Todo's
 
  - Write tests
- - Clean build process
  - Add more events and variables
  - Add more template examples
  - Add styleguide and classes
@@ -90,7 +90,6 @@ MIT
 
 [Go]:http://golang.org
 [Gin]:http://gin-gonic.github.io/gin/
-[Twitter Bootstrap]:http://twitter.github.com/bootstrap/
 [jQuery]:http://jquery.com
-[AngularJS]:http://angularjs.org
+[Backbone]:http://backbonejs.org
 [Gulp]:http://gulpjs.com
