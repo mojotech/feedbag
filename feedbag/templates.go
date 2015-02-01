@@ -1,14 +1,10 @@
 package feedbag
 
 import (
-	"bufio"
-	"encoding/json"
 	"errors"
 	"fmt"
-	"io"
 	"io/ioutil"
 	"log"
-	"os"
 	"strings"
 )
 
@@ -27,91 +23,90 @@ func ParseTemplatesDir(templatesDir string) ([]*Template, error) {
 	templates := []*Template{}
 
 	for _, fileInfo := range files {
-		tmpl, err := parseTemplate(templatesDir, fileInfo)
-		if err != nil {
-			log.Println(err.Error())
-		} else {
-			templates = append(templates, tmpl)
+		if strings.HasSuffix(fileInfo.Name(), ".tmpl") {
+			filePath := fmt.Sprintf("%s/%s", templatesDir, fileInfo.Name())
+			log.Println("Parsing template:", filePath)
+
+			content, err := ioutil.ReadFile(filePath)
+			if err != nil {
+				log.Println("Error opening template file:", filePath)
+				continue
+			}
+
+			template, err := parseTemplate(string(content))
+			if err != nil {
+				log.Println(err.Error())
+			} else {
+				templates = append(templates, template)
+			}
 		}
 	}
 
 	return templates, nil
 }
 
-func parseTemplate(dir string, file os.FileInfo) (*Template, error) {
+// func parseTemplate(dir string, file os.FileInfo) (*Template, error) {
+func parseTemplate(tmplString string) (*Template, error) {
 	var err error
-	var template *Template
+	template := &Template{}
 
-	if strings.HasSuffix(file.Name(), "tmpl") {
+	configBlock := false
+	configComplete := false
 
-		filePath := fmt.Sprintf("%s/%s", dir, file.Name())
-		log.Println("Parsing template:", filePath)
+	lines := strings.Split(tmplString, "\n")
+	for i, l := range lines {
+		line := strings.Trim(l, " \t\n\r")
 
-		file, err := os.Open(filePath)
-		if err != nil {
-			log.Println("Error opening template file:", filePath)
-			return nil, err
-		}
-		defer file.Close()
-		reader := bufio.NewReader(file)
-
-		// Read header delimiter of <!--
-		line, err := reader.ReadString('\n')
-		if line != "<!--\n" {
-			return nil, errors.New("Template file didn't begin with <!--")
+		if i == 0 {
+			if !strings.HasPrefix(line, "###") {
+				return nil, errors.New("First line of template must be opening `###` marker")
+			}
+			configBlock = true
+			continue
 		}
 
-		// Read the json config package up until the --> line
-		config := []byte{}
-		for {
-			line, err := reader.ReadBytes('\n')
-			if err != nil {
-				if err != io.EOF {
-					return nil, err
-				} else {
-					return nil, errors.New("Invalid template file")
-				}
+		if configBlock {
+			if strings.HasPrefix(line, "###") {
+				configBlock = false
+				configComplete = true
+				continue
 			}
 
-			if string(line) == "-->\n" {
-				break
+			// Read in the config line key: value pair and set it on template
+			data := strings.SplitN(line, ":", 2)
+			trimChars := " \"'"
+			switch strings.Trim(data[0], trimChars) {
+			case "id":
+				template.Id = strings.Trim(data[1], trimChars)
+			case "name":
+				template.Name = strings.Trim(data[1], trimChars)
+			case "event":
+				template.Event = strings.Trim(data[1], trimChars)
+			case "condition":
+				template.Condition = strings.Trim(data[1], trimChars)
 			}
-
-			config = append(config, line...)
+			continue
 		}
 
-		err = json.Unmarshal(config, &template)
-		if err != nil {
-			return nil, errors.New(fmt.Sprintf("Invalid template config: %q", string(config)))
-		}
+		// Config block is done, so take the rest of the lines as the Template and exit
+		template.Template = strings.Join(lines[i:], "\n")
+		break
+	}
 
-		if template.Id == "" {
-			return nil, errors.New(`Template is missing "id" field`)
-		}
+	if !configComplete {
+		return nil, errors.New(`Invalid config block. No closing '###' marker`)
+	}
 
-		if template.Name == "" {
-			return nil, errors.New(`Template is missing "name" field`)
-		}
+	if len(template.Id) == 0 {
+		return nil, errors.New(`Template is missing "id" field`)
+	}
 
-		if template.Event == "" {
-			return nil, errors.New(`Template is missing "event" field`)
-		}
+	if len(template.Name) == 0 {
+		return nil, errors.New(`Template is missing "name" field`)
+	}
 
-		// Now store the actual DOM for the template output
-		dom := []byte{}
-		for {
-			line, err := reader.ReadBytes('\n')
-			if err != nil {
-				if err != io.EOF {
-					return nil, err
-				} else {
-					break
-				}
-			}
-
-			dom = append(dom, line...)
-		}
-		template.Template = string(dom)
+	if len(template.Event) == 0 {
+		return nil, errors.New(`Template is missing "event" field`)
 	}
 
 	return template, err
