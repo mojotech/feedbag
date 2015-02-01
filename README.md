@@ -19,11 +19,11 @@ Ready](https://badge.waffle.io/mojotech/FeedBag.svg?label=ready&title=Ready)](ht
 
 Feedbag uses a number of open source projects to work:
 
-* [Go] - Golang. The best ServerLanguage
-* [Gin] - The fastest full-featured web framework for Golang. Crystal clear.
-* [Backbone] - Classic and effective.
-* [Gulp] - the streaming build system
-* [jQuery] - duh
+* [Go]
+* [Gin]
+* [Backbone]
+* [Gulp]
+* [jQuery]
 
 ## Developer Guide
 
