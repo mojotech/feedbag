@@ -12,7 +12,7 @@ func Test_ParseTemplatesDir(t *testing.T) {
 		validCount int
 		throwsErr  bool
 	}{
-		{"./../testing/templates", 3, false},
+		{"./testing/templates", 3, false},
 	}
 
 	for _, test := range cases {
