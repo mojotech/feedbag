@@ -9,7 +9,7 @@ An optional `condition` field can be added to further specify when the template 
 ### Version
 0.0.1
 
-
+[![Join the chat at https://gitter.im/mojotech/feedbag](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/mojotech/feedbag?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![GoDoc](https://godoc.org/github.com/mojotech/feedbag?status.svg)](https://godoc.org/github.com/mojotech/feedbag) [![Go Walker](http://gowalker.org/api/v1/badge)](https://gowalker.org/github.com/mojotech/feedbag) [![Build Status](https://travis-ci.org/mojotech/feedbag.svg)](https://travis-ci.org/mojotech/feedbag) [![Coverage](http://gocover.io/_badge/github.com/mojotech/feedbag)](http://gocover.io/github.com/mojotech/feedbag) [![Stories in
 Ready](https://badge.waffle.io/mojotech/FeedBag.svg?label=ready&title=Ready)](http://waffle.io/mojotech/FeedBag)
 
