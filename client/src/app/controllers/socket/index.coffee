@@ -5,7 +5,7 @@ class Socket
 
   initialize: ->
     # Connect to socket server
-    @socket = io("http://localhost:3000")
+    @socket = io()
 
     @socket.on "activity", @processActivity
 
