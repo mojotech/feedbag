@@ -1,5 +1,8 @@
 "use strict"
 
+# Setup socket listeners
+require('./controllers/socket')
+
 layoutView = require('./controllers/layout')
 templates = require('./controllers/templates')
 activity = require('./controllers/activity/activity.collection')

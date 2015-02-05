@@ -3,12 +3,11 @@
 var gulp = require('gulp');
 
 var paths = gulp.paths;
+var ports = gulp.ports;
 
 var util = require('util');
 
 var browserSync = require('browser-sync');
-
-var middleware = require('./proxy');
 
 function browserSyncInit(baseDir, files, browser) {
   browser = browser === undefined ? 'default' : browser;
@@ -24,15 +23,15 @@ function browserSyncInit(baseDir, files, browser) {
     startPath: '/',
     server: {
       baseDir: baseDir,
-      middleware: middleware,
       routes: routes
     },
-    port: 3002,
+    port: ports.static,
+    open: false,
     browser: browser
   });
 }
 
-gulp.task('serve', ['watch'], function () {
+gulp.task('browserSync', ['watch'], function () {
   browserSyncInit([
     paths.tmp + '/serve',
     paths.src

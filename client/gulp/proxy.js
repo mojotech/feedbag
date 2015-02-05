@@ -1,68 +1,60 @@
  /*jshint unused:false */
 
-/***************
-
-  This file allow to configure a proxy system plugged into BrowserSync
-  in order to redirect backend requests while still serving and watching
-  files from the web project
-
-  IMPORTANT: The proxy is disabled by default.
-
-  If you want to enable it, watch at the configuration options and finally
-  change the `module.exports` at the end of the file
-
-***************/
-
 'use strict';
 
+var gulp = require('gulp');
+
+var paths = gulp.paths;
+var ports = gulp.ports;
+
+var http = require('http');
+
 var httpProxy = require('http-proxy');
-var chalk = require('chalk');
 
-/*
- * Location of your backend server
- */
-var proxyTarget = 'http://localhost:3000';
-
-var proxy = httpProxy.createProxyServer({
-  target: proxyTarget
-});
-
-proxy.on('error', function(error, req, res) {
-  res.writeHead(500, {
-    'Content-Type': 'text/plain'
+function proxyServerInit() {
+  // Proxy for static asset requests and browser sync socket
+  var proxyWeb = new httpProxy.createProxyServer({
+    target: {
+      host: 'localhost',
+      port: ports.static
+    }
   });
 
-  console.error(chalk.red('[Proxy]'), error);
-});
+  // Proxy for server requests and server socket
+  var proxyServer = new httpProxy.createProxyServer({
+    target: {
+      host: 'localhost',
+      port: ports.server
+    }
+  });
 
-/*
- * The proxy middleware is an Express middleware added to BrowserSync to
- * handle backend request and proxy them to your backend.
- */
-function proxyMiddleware(req, res, next) {
-  /*
-   * This test is the switch of each request to determine if the request is
-   * for a static file to be handled by BrowserSync or a backend request to proxy.
-   *
-   * The existing test is a standard check on the files extensions but it may fail
-   * for your needs. If you can, you could also check on a context in the url which
-   * may be more reliable but can't be generic.
-   */
-  var extension = /\.(html|css|js|png|jpg|jpeg|gif|ico|xml|rss|txt|eot|svg|ttf|woff|cur|woff2|map)(\?((r|v|rel|rev)=[\-\.\w]*)?)?$/.test(req.url)
-  // Ensure that the proxy serves up the index page from gulp
-  var index = req.url == "/"
-  if (extension || index) {
-    next();
-  } else {
-    proxy.web(req, res);
-  }
+  // Create basic http server to use as proxy
+  var server = http.createServer(function (req, res) {
+    var staticExtensions = /\.(html|css|js|png|jpg|jpeg|gif|ico|xml|rss|txt|eot|svg|ttf|woff|cur|woff2|map)(\?((r|v|rel|rev)=[\-\.\w]*)?)?$/.test(req.url);
+    var indexPage = req.url === '/';
+    var browserSyncSocket = /^\/browser-sync/.test(req.url);
+
+    if (staticExtensions || indexPage || browserSyncSocket) {
+      proxyWeb.web(req, res);
+    } else {
+      proxyServer.web(req, res);
+    }
+  });
+
+  // Listen to the `upgrade` event and proxy the socket
+  server.on('upgrade', function (req, socket, head) {
+    var browserSyncSocket = /^\/browser-sync/.test(req.url);
+    if (browserSyncSocket) {
+      proxyWeb.ws(req, socket, head);
+    } else {
+      proxyServer.ws(req, socket, head);
+    }
+  });
+
+  // Serve it up
+  server.listen(ports.proxy);
 }
 
-/*
- * This is where you activate or not your proxy.
- *
- * The first line activate if and the second one ignored it
- */
-
-module.exports = [proxyMiddleware];
-// module.exports = [];
+gulp.task('serve', ['browserSync', 'open'], function() {
+  proxyServerInit();
+});
