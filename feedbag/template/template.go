@@ -13,6 +13,7 @@ type Template struct {
 	Name      string `json:"name"`
 	Event     string `json:"event"`
 	Condition string `json:"condition"`
+	Size      string `json:"size"`
 	Template  string `json:"template"`
 }
 
@@ -86,6 +87,8 @@ func parseTemplate(tmplString string) (*Template, error) {
 				template.Event = strings.Trim(data[1], trimChars)
 			case "condition":
 				template.Condition = strings.Trim(data[1], trimChars)
+			case "size":
+				template.Size = strings.Trim(data[1], trimChars)
 			}
 			continue
 		}
