@@ -29,13 +29,25 @@ type ActivityPayload struct {
 	MergedAt  string `json:"merged_at"`
 }
 
+type ActivityPayloadList []ActivityPayload
+
 func (p *ActivityPayload) Create() error {
 	err := dbmap.Insert(p)
 	return err
 }
 
-func ProcessPayload(e []github.Event, u User) ([]ActivityPayload, error) {
-	activityPayloads := []ActivityPayload{}
+func (p ActivityPayloadList) SaveUnique() (l ActivityPayloadList) {
+	for _, activity := range p {
+		err := activity.Create()
+		if err == nil {
+			l = append(l, activity)
+		}
+	}
+	return l
+}
+
+func ProcessPayload(e []github.Event, u User) (ActivityPayloadList, error) {
+	activityPayloads := ActivityPayloadList{}
 
 	for _, event := range e {
 		payload := ActivityPayload{}
@@ -131,12 +143,7 @@ func ProcessPayload(e []github.Event, u User) ([]ActivityPayload, error) {
 
 		} //End Switch
 
-		// Save the paylod to the db events table
-		err := payload.Create()
-		//Assuming fail due to the unique constraint
-		if err == nil {
-			activityPayloads = append(activityPayloads, payload)
-		}
+		activityPayloads = append(activityPayloads, payload)
 
 	}
 

@@ -30,7 +30,7 @@ func (a *Activity) Create() error {
 	return err
 }
 
-func ActivityParser(p []ActivityPayload) []Activity {
+func ActivityParser(p ActivityPayloadList) []Activity {
 	activities := []Activity{}
 
 	for _, payload := range p {
