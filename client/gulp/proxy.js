@@ -7,6 +7,8 @@ var gulp = require('gulp');
 var paths = gulp.paths;
 var ports = gulp.ports;
 
+var chalk = require('chalk');
+
 var http = require('http');
 
 var httpProxy = require('http-proxy');
@@ -20,12 +22,26 @@ function proxyServerInit() {
     }
   });
 
+  proxyWeb.on('error', function (error, req, res){
+    res.writeHead(500, {
+      'Content-Type': 'text/plain'
+    });
+    console.error(chalk.red('[ProxyWeb]'), error);
+  });
+
   // Proxy for server requests and server socket
   var proxyServer = new httpProxy.createProxyServer({
     target: {
       host: 'localhost',
       port: ports.server
     }
+  });
+
+  proxyServer.on('error', function (error, req, res){
+    res.writeHead(500, {
+      'Content-Type': 'text/plain'
+    });
+    console.error(chalk.red('[ProxyServer]'), error);
   });
 
   // Create basic http server to use as proxy
