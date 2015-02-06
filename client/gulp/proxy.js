@@ -46,7 +46,7 @@ function proxyServerInit() {
 
   // Create basic http server to use as proxy
   var server = http.createServer(function (req, res) {
-    var staticExtensions = /\.(html|css|js|png|jpg|jpeg|gif|ico|xml|rss|txt|eot|svg|ttf|woff|cur|woff2|map)(\?((r|v|rel|rev)=[\-\.\w]*)?)?$/.test(req.url);
+    var staticExtensions = /\.(html|css|js|png|jpg|jpeg|gif|ico|xml|rss|txt|eot|svg|ttf|woff|cur|woff2|map)\??/.test(req.url);
     var indexPage = req.url === '/';
     var browserSyncSocket = /^\/browser-sync/.test(req.url);
 
