@@ -13,7 +13,8 @@ gulp.task('watch', ['inject'], function () {
     paths.src + '/assets/styles/**/*.styl',
     paths.src + '/app/**/*.js',
     paths.src + '/app/**/*.coffee',
-    'bower.json'
+    'bower.json',
+    '../templates/**/*.tmpl'
   ], ['inject']);
 });
 
