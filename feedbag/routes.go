@@ -8,6 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/googollee/go-socket.io"
 	"github.com/markbates/goth/gothic"
+	"github.com/mojotech/feedbag/feedbag/template"
 )
 
 func SetupRoutes(r *gin.Engine, s *socketio.Server) {
@@ -30,7 +31,10 @@ func SetupRoutes(r *gin.Engine, s *socketio.Server) {
 }
 
 func templateHandler(c *gin.Context) {
-	Templates = getTemplates(TemplatesDir)
+	var err error
+	Templates, err = template.ParseDir(TemplatesDir)
+	checkErr(err, "Failed to load templates")
+
 	c.JSON(200, Templates)
 }
 

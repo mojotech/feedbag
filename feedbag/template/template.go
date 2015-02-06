@@ -1,4 +1,4 @@
-package feedbag
+package template
 
 import (
 	"errors"
@@ -16,9 +16,11 @@ type Template struct {
 	Template  string `json:"template"`
 }
 
-func ParseTemplatesDir(templatesDir string) ([]*Template, error) {
+func ParseDir(templatesDir string) ([]*Template, error) {
 	files, err := ioutil.ReadDir(templatesDir)
-	checkErr(err, "Read templates dir failed:")
+	if err != nil {
+		return nil, err
+	}
 
 	templates := []*Template{}
 
@@ -110,14 +112,4 @@ func parseTemplate(tmplString string) (*Template, error) {
 	}
 
 	return template, err
-}
-
-func getTemplates(templatesDir string) []*Template {
-	// Parse templates
-	templates, err := ParseTemplatesDir(templatesDir)
-	if err != nil {
-		checkErr(err, "Problem parsing templates")
-	}
-	log.Println(fmt.Sprintf("Found %d valid templates", len(templates)))
-	return templates
 }
