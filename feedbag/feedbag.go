@@ -8,12 +8,12 @@ import (
 	"log"
 	"os"
 
+	"github.com/begizi/gin-cors"
 	"github.com/gin-gonic/gin"
 	"github.com/go-gorp/gorp"
 	"github.com/markbates/goth"
 	"github.com/markbates/goth/providers/github"
 	_ "github.com/mattn/go-sqlite3"
-	"github.com/tommy351/gin-cors"
 )
 
 var (

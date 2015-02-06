@@ -1,6 +1,6 @@
 {
 	"ImportPath": "github.com/mojotech/feedbag",
-	"GoVersion": "go1.4",
+	"GoVersion": "go1.4.1",
 	"Deps": [
 		{
 			"ImportPath": "code.google.com/p/goauth2/oauth",
@@ -8,9 +8,13 @@
 			"Rev": "afe77d958c701557ec5dc56f6936fcc194d15520"
 		},
 		{
+			"ImportPath": "github.com/begizi/gin-cors",
+			"Rev": "b219600569f81c7d8015c409d41c7334ec7606b4"
+		},
+		{
 			"ImportPath": "github.com/gin-gonic/gin",
-			"Comment": "v0.4-16-g28b9ff9",
-			"Rev": "28b9ff9e3495dabeaea2da86c100effbf1a68346"
+			"Comment": "v0.4-66-g5cfe2c5",
+			"Rev": "5cfe2c56dd0692c474c3d97665d8de278ac69c61"
 		},
 		{
 			"ImportPath": "github.com/go-gorp/gorp",
@@ -61,10 +65,6 @@
 		{
 			"ImportPath": "github.com/mattn/go-sqlite3",
 			"Rev": "d8029554b4cbb9a1c12311d307f4154b515566b4"
-		},
-		{
-			"ImportPath": "github.com/tommy351/gin-cors",
-			"Rev": "1a290fc71bb902dad18e23fc2d5782a06517bf71"
 		},
 		{
 			"ImportPath": "golang.org/x/net/context",
