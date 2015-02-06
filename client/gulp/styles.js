@@ -18,7 +18,6 @@ gulp.task('styles', function () {
   var injectOptions = {
     transform: function(filePath) {
       filePath = filePath.replace(paths.src + '/assets/styles/', '');
-      console.log(filePath);
       return '@import \'' + filePath + '\';';
     },
     starttag: '// injector',
