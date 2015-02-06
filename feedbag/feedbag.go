@@ -17,7 +17,7 @@ import (
 )
 
 var (
-	dbmap        = setupDb()
+	dbmap        *gorp.DbMap
 	activityChan = make(chan []Activity)
 	TemplatesDir string
 	Templates    []*Template
@@ -29,6 +29,7 @@ type RawJson map[string]interface{}
 type TypeConverter struct{}
 
 func Start(port, templatesDir string) error {
+	dbmap = setupDb()
 	defer dbmap.Db.Close()
 
 	// Process our templates
