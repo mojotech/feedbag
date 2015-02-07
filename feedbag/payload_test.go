@@ -13,6 +13,30 @@ import (
 
 func TestProcessPayload(t *testing.T) {
 
+	Convey("Given a malformed payload", t, func() {
+		e := generateEvent("12345678", "IssueCommentEvent", "./testing/malformed_payload.json")
+		u := generateUser()
+
+		activityPayload, err := feedbag.ProcessPayload(e, u)
+
+		Convey("The Activity Payload should be Empty", func() {
+			So(err, ShouldBeNil)
+			So(activityPayload, ShouldBeEmpty)
+		})
+	})
+
+	Convey("Given an unrecognized Github event", t, func() {
+		e := generateEvent("12345678", "BadEvent", "./testing/issue_comment_payload.json")
+		u := generateUser()
+
+		activityPayload, err := feedbag.ProcessPayload(e, u)
+
+		Convey("An activity payload should not be created", func() {
+			So(err, ShouldBeNil)
+			So(activityPayload, ShouldBeEmpty)
+		})
+	})
+
 	Convey("Given a Github CreateIssueComment event", t, func() {
 		e := generateEvent("12345678", "IssueCommentEvent", "./testing/issue_comment_payload.json")
 		u := generateUser()
@@ -35,14 +59,18 @@ func TestProcessPayload(t *testing.T) {
 		})
 
 		Convey("The title should equal the Github event title", func() {
-			So(payload.Title, ShouldEqual, "Title")
+			So(payload.Issue.Title, ShouldEqual, "Title")
 		})
 
 		Convey("The body should equal the Github event body", func() {
-			So(payload.Body, ShouldEqual, "Body")
+			So(payload.Comment.Body, ShouldEqual, "Body")
 		})
 
+		Convey("The issue labels should not be empty", func() {
+			So(payload.Issue.Labels, ShouldNotBeEmpty)
+		})
 	})
+
 }
 
 /*
