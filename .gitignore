@@ -4,3 +4,7 @@ gin-bin
 bower_components/
 node_modules/
 Godeps/_workspace
+responses/
+serve
+serve.linux
+serve.exe
