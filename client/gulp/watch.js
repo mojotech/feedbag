@@ -22,7 +22,7 @@ gulp.task('open', function() {
   var openOpts = {
     url: 'http://localhost:' + ports.proxy
   };
-  gulp.src('./index.html')
+  gulp.src('./src/index.html')
   .pipe($.open('', openOpts));
 });
 
