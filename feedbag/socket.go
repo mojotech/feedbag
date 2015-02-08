@@ -12,7 +12,6 @@ func SetupSocketIO() (*socketio.Server, error) {
 		return nil, err
 	}
 
-	checkErr(err, "Problem making socket.io server:")
 	server.On("connection", func(so socketio.Socket) {
 		log.Println("New socket.io connection:", so.Id())
 		so.Join("feedbag")
