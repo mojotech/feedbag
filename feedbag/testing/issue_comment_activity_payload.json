@@ -1,0 +1,8 @@
+{
+  "event_type": "CreateIssueComment",
+  "create_issue_comment": true,
+  "open_pull_request": false,
+  "title": "Title",
+  "body": "Body",
+  "number": 101
+}
