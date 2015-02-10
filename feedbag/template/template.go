@@ -106,10 +106,6 @@ func parseTemplate(tmplString string) (*Template, error) {
 		return nil, errors.New(`Template is missing "id" field`)
 	}
 
-	if len(template.Name) == 0 {
-		return nil, errors.New(`Template is missing "name" field`)
-	}
-
 	if len(template.Event) == 0 {
 		return nil, errors.New(`Template is missing "event" field`)
 	}

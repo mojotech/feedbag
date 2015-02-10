@@ -4,31 +4,68 @@ import (
 	"testing"
 
 	"github.com/mojotech/feedbag/feedbag/template"
+	. "github.com/smartystreets/goconvey/convey"
 )
 
 func Test_ParseTemplatesDir(t *testing.T) {
-	cases := []struct {
-		dir        string
-		validCount int
-		throwsErr  bool
-	}{
-		{"./test_templates", 3, false},
-	}
+	testDir := "./test_templates"
+	templates, err := template.ParseDir(testDir)
 
-	for _, test := range cases {
-		templates, err := template.ParseDir(test.dir)
-		if test.validCount != len(templates) {
-			t.Errorf("ParseTemplatesDir expected %d valid templates but found %d in dir: %s", test.validCount, len(templates), test.dir)
+	Convey("Given the test template directory", t, func() {
+		So(err, ShouldBeNil)
+		So(len(templates), ShouldEqual, 4)
+
+		var (
+			newPrTmpl         template.Template
+			missingNameTmpl   template.Template
+			newCommentTmpl    template.Template
+			longerMarkersTmpl template.Template
+		)
+
+		for _, tmpl := range templates {
+			switch tmpl.Id {
+			case "new_comment":
+				newCommentTmpl = *tmpl
+			case "new_pr":
+				newPrTmpl = *tmpl
+			case "missing_name":
+				missingNameTmpl = *tmpl
+			case "longer_markers":
+				longerMarkersTmpl = *tmpl
+			}
 		}
 
-		if test.throwsErr {
-			if err == nil {
-				t.Errorf("ParseTemplatesDir expected an err but didn't for dir: %s", test.dir)
-			}
-		} else {
-			if err != nil {
-				t.Errorf("ParseTemplatesDir should not have thrown an error but did for directory: %s, %q", test.dir, err.Error())
-			}
-		}
-	}
+		Convey("The New Comment template should exist", func() {
+			t := newCommentTmpl
+			So(t, ShouldNotBeNil)
+			So(t.Id, ShouldEqual, "new_comment")
+			So(t.Name, ShouldEqual, "New Comment")
+			So(t.Event, ShouldEqual, "comment_pull_request")
+		})
+
+		Convey("The New PR template should exist", func() {
+			t := newPrTmpl
+			So(t, ShouldNotBeNil)
+			So(t.Id, ShouldEqual, "new_pr")
+			So(t.Name, ShouldEqual, "New Pull Request")
+			So(t.Event, ShouldEqual, "new_pull_request")
+		})
+
+		Convey("The Missing Name template should exist", func() {
+			t := missingNameTmpl
+			So(t, ShouldNotBeNil)
+			So(t.Id, ShouldEqual, "missing_name")
+			So(t.Name, ShouldEqual, "")
+			So(t.Event, ShouldEqual, "comment_pull_request")
+		})
+
+		Convey("The Longer Than Default Markers template should exist", func() {
+			t := longerMarkersTmpl
+			So(t, ShouldNotBeNil)
+			So(t.Id, ShouldEqual, "longer_markers")
+			So(t.Name, ShouldEqual, "Longer Than Default Markers")
+			So(t.Event, ShouldEqual, "comment_pull_request")
+		})
+
+	})
 }
