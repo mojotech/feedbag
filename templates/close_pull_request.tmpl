@@ -5,7 +5,7 @@ event: ClosePullRequest
 size: small
 ###
 
-<div class="pull-request-wrapper">
-  Closed PR - {{title}}
-  <p>{{body}}</p>
+<div class="close-pr-wrapper">
+  <p>{{pull_request.title}}</p>
+  <p>{{pull_request.body}}</p>
 </div>

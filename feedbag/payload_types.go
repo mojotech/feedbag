@@ -2,75 +2,103 @@ package feedbag
 
 // GithubUser
 type GithubUser struct {
-	Id        int    `json:"id"`
-	Login     string `json:"login"`
-	Type      string `json:"type"`
-	AvatarUrl string `json:"avatar_url"`
-	HtmlUrl   string `json:"html_url"`
+	Id        int    `json:"id,omitempty"`
+	Login     string `json:"login,omitempty"`
+	Type      string `json:"type,omitempty"`
+	AvatarUrl string `json:"avatar_url,omitempty"`
+	HtmlUrl   string `json:"html_url,omitempty"`
+}
+
+type Commits []Commit
+type Commit struct {
+	Sha      string     `json:"sha,omitempty"`
+	Message  string     `json:"message,omitempty"`
+	Auther   GithubUser `json:"auther,omitempty"`
+	Url      string     `json:"url,omitempty"`
+	Distinct bool       `json:"distinct,omitempty"`
+	Commiter GithubUser `json:"commiter,omitempty"`
 }
 
 type Repository struct {
-	Id              int        `json:"id"`
-	Name            string     `json:"name"`
-	FullName        string     `json:"full_name"`
-	Owner           GithubUser `json:"owner"`
-	Private         bool       `json:"bool"`
-	HtmlUrl         string     `json:"html_url"`
-	Description     string     `json:"description"`
-	Fork            bool       `json:"fork"`
-	Homepage        string     `json:"homepage"`
-	StargazersCount int        `json:"stargazers_count"`
-	WatchersCount   int        `json:"watchers_count"`
-	ForksCount      int        `json:"forks_count"`
-	OpenIssues      int        `json:"open_issues"`
+	Id              int        `json:"id,omitempty"`
+	Name            string     `json:"name,omitempty"`
+	FullName        string     `json:"full_name,omitempty"`
+	Owner           GithubUser `json:"owner,omitempty"`
+	Private         bool       `json:"bool,omitempty"`
+	HtmlUrl         string     `json:"html_url,omitempty"`
+	Description     string     `json:"description,omitempty"`
+	Fork            bool       `json:"fork,omitempty"`
+	Homepage        string     `json:"homepage,omitempty"`
+	StargazersCount int        `json:"stargazers_count,omitempty"`
+	WatchersCount   int        `json:"watchers_count,omitempty"`
+	ForksCount      int        `json:"forks_count,omitempty"`
+	OpenIssues      int        `json:"open_issues,omitempty"`
 }
 
 // PullRequest
 type PullRequest struct {
-	Title          string     `json:"title"`
-	Body           string     `json:"body"`
-	Commits        int        `json:"commits"`
-	Number         int        `json:"number"`
-	HtmlUrl        string     `json:"html_url"`
-	State          string     `json:"state"`
-	Locked         bool       `json:"locked"`
-	User           GithubUser `json:"user"`
-	Assignee       GithubUser `json:"assignee"`
-	Merged         bool       `json:"merged"`
-	Mergable       bool       `json:"mergable"`
-	MergedBy       GithubUser `json:"merged_by"`
-	ChangedFiles   int        `json:"changed_files"`
-	ReviewComments int        `json:"review_comments"`
-	Repository     Repository `json:"repository"`
-	Sender         GithubUser `json:"sender"`
+	Title          string     `json:"title,omitempty"`
+	Body           string     `json:"body,omitempty"`
+	Commits        int        `json:"commits,omitempty"`
+	Number         int        `json:"number,omitempty"`
+	Head           Location   `json:"head,omitempty"`
+	Base           Location   `json:"base,omitempty"`
+	HtmlUrl        string     `json:"html_url,omitempty"`
+	State          string     `json:"state,omitempty"`
+	Locked         bool       `json:"locked,omitempty"`
+	User           GithubUser `json:"user,omitempty"`
+	Assignee       GithubUser `json:"assignee,omitempty"`
+	Merged         bool       `json:"merged,omitempty"`
+	Mergable       bool       `json:"mergable,omitempty"`
+	MergedBy       GithubUser `json:"merged_by,omitempty"`
+	ChangedFiles   int        `json:"changed_files,omitempty"`
+	ReviewComments int        `json:"review_comments,omitempty"`
+	Sender         GithubUser `json:"sender,omitempty,omitempty"`
 }
 
 // Issue
 type Issue struct {
-	Id       int        `json:"id"`
-	HtmlUrl  string     `json:"html_url"`
-	Number   int        `json:"number"`
-	Title    string     `json:"title"`
-	Body     string     `json:"body"`
-	User     GithubUser `json:"user"`
-	Labels   Labels     `json:"labels"`
-	State    string     `json:"state"`
-	Locked   bool       `json:"locked"`
-	Assignee GithubUser `json:"assignee"`
-	Comments int        `json:"comments"`
+	Id       int        `json:"id,omitempty"`
+	HtmlUrl  string     `json:"html_url,omitempty"`
+	Number   int        `json:"number,omitempty"`
+	Title    string     `json:"title,omitempty"`
+	Body     string     `json:"body,omitempty"`
+	User     GithubUser `json:"user,omitempty"`
+	Labels   Labels     `json:"labels,omitempty"`
+	State    string     `json:"state,omitempty"`
+	Locked   bool       `json:"locked,omitempty"`
+	Assignee GithubUser `json:"assignee,omitempty"`
+	Comments int        `json:"comments,omitempty"`
 }
 
 // Comment
 type Comment struct {
-	Id      int    `json:"id"`
-	HtmlUrl string `json:"html_url"`
-	Body    string `json:"body"`
+	Id      int        `json:"id,omitempty"`
+	HtmlUrl string     `json:"html_url,omitempty"`
+	Body    string     `json:"body,omitempty"`
+	User    GithubUser `json:"user,omitempty"`
+}
+
+type Location struct {
+	Label string     `json:"label,omitempty"`
+	Ref   string     `json:"ref,omitempty"`
+	Sha   string     `json:"sha,omitempty"`
+	User  GithubUser `json:"user,omitempty"`
+	Repo  Repository `json:"repo,omitempty"`
+}
+
+type Forkee struct {
+	Id         int        `json:"id,omitempty"`
+	Name       string     `json:"name,omitempty"`
+	Owner      GithubUser `json:"owner,omitempty"`
+	Repository Repository `json:"repository,omitempty"`
+	Sender     GithubUser `json:"sender,omitempty"`
 }
 
 // Labels
 type Labels []Label
 type Label struct {
-	Url   string `json:"url"`
-	Name  string `json:"name"`
-	Color string `json:"color"`
+	Url   string `json:"url,omitempty"`
+	Name  string `json:"name,omitempty"`
+	Color string `json:"color,omitempty"`
 }
