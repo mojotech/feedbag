@@ -46,7 +46,9 @@ func userRoutine(u User, c chan<- []Activity) error {
 		}
 
 		activityPayload, err := ProcessPayload(events, u)
-		activities := ActivityParser(activityPayload)
+		checkErr(err, "Failed to process payload")
+
+		activities := ActivityParser(activityPayload.SaveUnique())
 
 		c <- activities
 

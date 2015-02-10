@@ -13,132 +13,100 @@ type ActivityPayload struct {
 
 	EventType string `json:"event_type"`
 
+	//User
+	ActionCreator User `json:"action_creator"db:"-"`
+
 	//Events
 	OpenPullRequest    bool `json:"open_pull_request"`
 	ClosePullRequest   bool `json:"close_pull_request"`
 	OpenIssue          bool `json:"open_issue"`
 	CreateIssueComment bool `json:"create_issue_comment"`
 
-	//Variables
-	Title     string `json:"title"`
-	Body      string `json:"body"`
-	Number    int    `json:"number"`
-	CreatedAt string `json:"created_at"`
-	UpdatedAt string `json:"updated_at"`
-	ClosedAt  string `json:"closed_at"`
-	MergedAt  string `json:"merged_at"`
+	//Payload Structs
+	Action      string      `json:"action,omitempty"`
+	Number      int         `json:"number,omitempty"`
+	PullRequest PullRequest `json:"pull_request"db:"-"`
+	Repository  Repository  `json:"repository"db:"-"`
+	Issue       Issue       `json:"issue"db:"-"`
+	Comment     Comment     `json:"comment"db:"-"`
+	Label       Label       `json:"label"db:"-"`
+	Sender      GithubUser  `json:"sender"db:"-"`
+	Assignee    GithubUser  `json:"assignee"db:"-"`
 }
+
+type ActivityPayloadList []ActivityPayload
 
 func (p *ActivityPayload) Create() error {
 	err := dbmap.Insert(p)
 	return err
 }
 
-func ProcessPayload(e []github.Event, u User) ([]ActivityPayload, error) {
-	activityPayloads := []ActivityPayload{}
+func (p ActivityPayloadList) SaveUnique() (l ActivityPayloadList) {
+	for _, activity := range p {
+		err := activity.Create()
+		if err == nil {
+			l = append(l, activity)
+		}
+	}
+	return l
+}
+
+func ProcessPayload(e []github.Event, u User) (ActivityPayloadList, error) {
+	activityPayloads := ActivityPayloadList{}
 
 	for _, event := range e {
-		payload := ActivityPayload{}
+		a := ActivityPayload{}
 
-		payload.GithubId = *event.ID
-
-		rawPayload := make(map[string]interface{})
-		if err := json.Unmarshal(*event.RawPayload, &rawPayload); err != nil {
-			panic(err.Error())
+		// Marshal raw payload into activity payload struct.
+		if err := json.Unmarshal(*event.RawPayload, &a); err != nil {
+			// If error unmarshaling payload reset the loop
+			continue
 		}
 
-		//Save the raw payload
-		payload.RawPayload = rawPayload
+		// Set Github Id of event. Has Unique constraint on the database.
+		a.GithubId = *event.ID
 
-		switch *event.Type {
-		case "PullRequestEvent":
-			// Set Pull Request Event type (open or closed)
-			if val, ok := rawPayload["action"]; ok && val == "opened" {
-				payload.EventType = "OpenPullRequest"
-				payload.OpenPullRequest = true
-			} else {
-				payload.EventType = "ClosePullRequest"
-				payload.ClosePullRequest = true
-			}
+		// Set Raw Payload. We don't care if this errors out.
+		_ = json.Unmarshal(*event.RawPayload, &a.RawPayload)
 
-			if pr, ok := rawPayload["pull_request"].(map[string]interface{}); ok {
-				if val, ok := pr["title"].(string); ok {
-					payload.Title = val
-				}
-				if val, ok := pr["body"].(string); ok {
-					payload.Body = val
-				}
-				if val, ok := pr["number"].(float64); ok {
-					payload.Number = int(val)
-				}
-
-				//Set times
-				if val, ok := pr["created_at"].(string); ok {
-					payload.CreatedAt = val
-				}
-				if val, ok := pr["updated_at"].(string); ok {
-					payload.UpdatedAt = val
-				}
-				if val, ok := pr["closed_at"].(string); ok {
-					payload.ClosedAt = val
-				}
-				if val, ok := pr["merged_at"].(string); ok {
-					payload.MergedAt = val
-				}
-			}
-
-		case "IssueEvent":
-			if val, ok := rawPayload["action"]; ok && val == "opened" {
-				payload.EventType = "OpenIssue"
-				payload.OpenIssue = true
-			}
-
-			if issue, ok := rawPayload["issue"].(map[string]interface{}); ok {
-				if val, ok := issue["number"].(float64); ok {
-					payload.Number = int(val)
-				}
-				if val, ok := issue["title"].(string); ok {
-					payload.Title = val
-				}
-				if val, ok := issue["body"].(string); ok {
-					payload.Body = val
-				}
-
-				//Set times
-				if val, ok := issue["created_at"].(string); ok {
-					payload.CreatedAt = val
-				}
-				if val, ok := issue["updated_at"].(string); ok {
-					payload.UpdatedAt = val
-				}
-				if val, ok := issue["closed_at"].(string); ok {
-					payload.ClosedAt = val
-				}
-			}
-
-		case "IssueCommentEvent":
-			if val, ok := rawPayload["action"]; ok && val == "created" {
-				payload.EventType = "CreateIssueComment"
-				payload.CreateIssueComment = true
-			}
-			if issue, ok := rawPayload["issue"].(map[string]interface{}); ok {
-				payload.Number = int(issue["number"].(float64))
-				payload.Title = issue["title"].(string)
-			}
-			if comment, ok := rawPayload["comment"].(map[string]interface{}); ok {
-				payload.Body = comment["body"].(string)
-			}
-
-		} //End Switch
-
-		// Save the paylod to the db events table
-		err := payload.Create()
-		//Assuming fail due to the unique constraint
-		if err == nil {
-			activityPayloads = append(activityPayloads, payload)
+		// Set the event type and reset the loop if no match is found.
+		if !a.setEventType(event) {
+			continue
 		}
 
+		// Add action creator
+		a.ActionCreator = u
+
+		activityPayloads = append(activityPayloads, a)
 	}
 
 	return activityPayloads, nil
+}
+
+func (a *ActivityPayload) setEventType(e github.Event) bool {
+	switch *e.Type {
+	case "IssueCommentEvent":
+		if a.Action == "created" {
+			a.EventType = "CreateIssueComment"
+			a.CreateIssueComment = true
+		}
+	case "PullRequestEvent":
+		switch a.Action {
+		case "opened":
+			a.EventType = "OpenPullRequest"
+			a.OpenPullRequest = true
+		case "closed":
+			a.EventType = "ClosePullRequest"
+			a.ClosePullRequest = true
+		}
+	case "IssueEvent":
+		switch a.Action {
+		case "opened":
+			a.EventType = "OpenIssue"
+			a.OpenIssue = true
+		}
+	default:
+		return false
+	}
+	return true
 }
