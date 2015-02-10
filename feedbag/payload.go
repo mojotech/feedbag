@@ -37,7 +37,7 @@ type ActivityPayload struct {
 	CreateIssueComment       bool `json:"create_issue_comment"`
 
 	//User
-	ActionCreator User `json:"action_creator"db:"-"`
+	EventOwner User `json:"action_creator"db:"-"`
 
 	//Payload Structs
 	Action      string      `json:"action,omitempty"`
@@ -94,7 +94,7 @@ func ProcessPayload(e []github.Event, u User) (ActivityPayloadList, error) {
 		}
 
 		// Add action creator
-		a.ActionCreator = u
+		a.EventOwner = u
 
 		activityPayloads = append(activityPayloads, a)
 	}

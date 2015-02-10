@@ -8,7 +8,7 @@ type User struct {
 	ProfileUrl  string  `json:"profile_url"`
 	Email       string  `json:"email"`
 	Joined      string  `json:"joined"`
-	Raw         RawJson `json:"raw"`
+	Raw         RawJson `json:"-"`
 	AccessToken string  `json:"-"`
 	TimeStamp
 }
