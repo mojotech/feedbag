@@ -1,0 +1,10 @@
+###
+id: merged_pr
+name: Merged Pull Request
+event: MergedPullRequest
+size: medium
+###
+
+<div class="merged-pr-wrapper">
+  @{{pull_request.merged_by.login}} merged PR #{{pull_request.number}} "{{pull_request.title}}"
+</div>

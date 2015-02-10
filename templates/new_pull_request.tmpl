@@ -2,10 +2,9 @@
 id: new_pr
 name: New Pull Request
 event: OpenPullRequest
-size: medium
+size: small
 ###
 
 <div class="pull-request-wrapper">
-  New PR - {{title}}
-  <p>{{body}}</p>
+  @{{pull_request.user.login}} created PR #{{pull_request.number}} "{{pull_request.title}}"
 </div>
