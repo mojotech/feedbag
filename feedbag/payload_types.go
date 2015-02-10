@@ -9,6 +9,16 @@ type GithubUser struct {
 	HtmlUrl   string `json:"html_url"`
 }
 
+type Commits []Commit
+type Commit struct {
+	Sha      string     `json:"sha"`
+	Message  string     `json:"message"`
+	Auther   GithubUser `json:"auther"`
+	Url      string     `json:"url"`
+	Distinct bool       `json:"distinct"`
+	Commiter GithubUser `json:"commiter"`
+}
+
 type Repository struct {
 	Id              int        `json:"id"`
 	Name            string     `json:"name"`
@@ -62,9 +72,18 @@ type Issue struct {
 
 // Comment
 type Comment struct {
-	Id      int    `json:"id"`
-	HtmlUrl string `json:"html_url"`
-	Body    string `json:"body"`
+	Id      int        `json:"id"`
+	HtmlUrl string     `json:"html_url"`
+	Body    string     `json:"body"`
+	User    GithubUser `json:"user"`
+}
+
+type Forkee struct {
+	Id         int        `json:"id"`
+	Name       string     `json:"name"`
+	Owner      GithubUser `json:"owner"`
+	Repository Repository `json:"repository"`
+	Sender     GithubUser `json:"sender"`
 }
 
 // Labels
