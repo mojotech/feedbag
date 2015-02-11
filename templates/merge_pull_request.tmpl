@@ -2,9 +2,19 @@
 id: merged_pr
 name: Merged Pull Request
 event: MergedPullRequest
-size: medium
+size: small
 ###
 
-<div class="merged-pr-wrapper">
-  @{{pull_request.merged_by.login}} merged PR #{{pull_request.number}} "{{pull_request.title}}"
+<div class="merged-pr-wrapper purple">
+  <div class="content-center">
+    <div class="icon-holder icon-holder-lg circle">
+      <i class="icon icon-git-merge"></i>
+    </div>
+  </div>
+  <div class="text-center">
+    <strong>{{pull_request.merged_by.login}}</strong> merged
+    <strong>{{pull_request.head.ref}}</strong> to
+    <strong>{{pull_request.base.ref}}</strong> on
+    <strong>{{pull_request.base.repo.full_name}}</strong>
+  </div>
 </div>
