@@ -65,7 +65,7 @@ gulp.task('images', function () {
 });
 
 gulp.task('fonts', function () {
-  return gulp.src($.mainBowerFiles())
+  return gulp.src(paths.src + '/assets/fonts/**/*')
     .pipe($.filter('**/*.{eot,svg,ttf,woff}'))
     .pipe($.flatten())
     .pipe(gulp.dest(paths.dist + '/fonts/'));

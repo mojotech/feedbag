@@ -9,6 +9,7 @@ import (
 	"os"
 
 	"github.com/begizi/gin-cors"
+	"github.com/gin-gonic/contrib/static"
 	"github.com/gin-gonic/gin"
 	"github.com/go-gorp/gorp"
 	"github.com/markbates/goth"
@@ -29,7 +30,7 @@ type RawJson map[string]interface{}
 
 type TypeConverter struct{}
 
-func Start(port, templatesDir string) error {
+func Start(port, templatesDir string, publicDir string) error {
 	dbmap = setupDb()
 	defer dbmap.Db.Close()
 
@@ -63,6 +64,10 @@ func Start(port, templatesDir string) error {
 	// Start up gin and its friends
 	r := gin.Default()
 	r.Use(cors.Middleware(cors.Options{AllowCredentials: true}))
+
+	// Serve static assets
+	r.Use(static.Serve("/", static.LocalFile(publicDir, false)))
+
 	SetupRoutes(r, socketServer)
 	r.Run(fmt.Sprintf(":%s", port))
 
