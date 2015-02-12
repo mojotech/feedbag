@@ -5,6 +5,13 @@ event: OpenPullRequest
 size: small
 ###
 
-<div class="pull-request-wrapper">
-  @{{pull_request.user.login}} created PR #{{pull_request.number}} "{{pull_request.title}}"
+<div class="pull-request-wrapper green">
+  <div class="content-center">
+    <div class="icon-holder icon-holder-lg circle">
+      <i class="icon icon-git-pull-request"></i>
+    </div>
+  </div>
+  <div class="text-center">
+    <strong>{{pull_request.user.login}}</strong> opened pull request "{{pull_request.title}}"
+  </div>
 </div>

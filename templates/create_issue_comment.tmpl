@@ -6,6 +6,14 @@ size: small
 ###
 
 <div class="create-issue-comment-wrapper">
-  <p>{{comment.title}}</p>
-  <p>{{comment.body}}</p>
+  <div class="text-center text-lg word-break padding">
+    "{{comment.body}}"
+  </div>
+
+  <div class="footer background-lighten padding-sm">
+    <div class="media">
+      <div class="user media-left"><img class="circle" src="{{comment.user.avatar_url}}" /></div>
+      <div class="media-body media-middle"><strong>{{comment.user.login}}</strong> commented on issue <strong>#{{issue.number}}</strong></div>
+    </div>
+  </div>
 </div>
