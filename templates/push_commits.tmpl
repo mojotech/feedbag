@@ -1,0 +1,24 @@
+###
+id: push_commits
+name: Push Commits
+event: Push
+condition: gt .DistinctSize 0
+size: small
+###
+
+<div class="push-commits-wrapper">
+  <div class="content-center">
+    <div class="icon-holder icon-holder-lg circle">
+      <i class="icon icon-git-commit"></i>
+    </div>
+  </div>
+
+  <div class="text-center">{{action_creator.name}} pushed commits to {{ref}}</div>
+
+  <ul>
+    {{#each commits}}
+      <li>{{this.message}}</li>
+    {{/each}}
+  </ul>
+
+</div>
