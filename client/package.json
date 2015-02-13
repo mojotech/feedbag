@@ -2,6 +2,11 @@
   "name": "feedBag",
   "version": "0.0.0",
   "dependencies": {},
+  "scripts": {
+    "postinstall": "bower i",
+    "bower": "bower i",
+    "start": "gulp serve"
+  },
   "devDependencies": {
     "browser-sync": "~1.7.1",
     "browserify": "^8.1.1",
