@@ -29,13 +29,6 @@ Feedbag uses a number of open source projects to work:
 
 ### Installation
 
-You need Gulp and Bower installed globally:
-
-```sh
-$ npm i -g gulp
-$ npm i -g bower
-```
-
 Optionally, install gin for running the go server
 
 ```sh
