@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"strconv"
 	"strings"
 )
 
@@ -14,6 +15,8 @@ type Template struct {
 	Event     string `json:"event"`
 	Condition string `json:"condition"`
 	Size      string `json:"size"`
+	Priority  int    `json:"priority"`
+	Break     bool   `json:"break"`
 	Template  string `json:"template"`
 }
 
@@ -89,6 +92,12 @@ func parseTemplate(tmplString string) (*Template, error) {
 				template.Condition = strings.Trim(data[1], trimChars)
 			case "size":
 				template.Size = strings.Trim(data[1], trimChars)
+			case "priority":
+				i, _ = strconv.Atoi(strings.Trim(data[1], trimChars))
+				template.Priority = i
+			case "break":
+				b, _ := strconv.ParseBool(strings.Trim(data[1], trimChars))
+				template.Break = b
 			}
 			continue
 		}
