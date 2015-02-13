@@ -5,7 +5,14 @@ event: ClosePullRequest
 size: small
 ###
 
-<div class="close-pr-wrapper">
-  <p>{{pull_request.title}}</p>
-  <p>{{pull_request.body}}</p>
+<div class="close-pr-wrapper red">
+  <div class="content-center">
+    <div class="icon-holder icon-holder-lg circle">
+      <i class="icon icon-git-pull-request"></i>
+    </div>
+  </div>
+  <div class="text-center">
+    <strong>{{pull_request.user.login}}</strong> closed pull request "{{pull_request.title}}"
+  </div>
+
 </div>
