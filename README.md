@@ -68,8 +68,7 @@ Run the gulp task
 ```sh
 $ cd client
 $ npm i
-$ bower i
-$ gulp serve
+& npm start
 ```
 
 ### Todo's
