@@ -15,7 +15,7 @@ type Commits []Commit
 type Commit struct {
 	Sha      string     `json:"sha,omitempty"`
 	Message  string     `json:"message,omitempty"`
-	Auther   GithubUser `json:"auther,omitempty"`
+	Author   GithubUser `json:"author,omitempty"`
 	Url      string     `json:"url,omitempty"`
 	Distinct bool       `json:"distinct,omitempty"`
 	Commiter GithubUser `json:"commiter,omitempty"`
