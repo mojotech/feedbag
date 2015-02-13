@@ -22,7 +22,7 @@ var (
 	dbmap        *gorp.DbMap
 	activityChan = make(chan []Activity)
 	TemplatesDir string
-	Templates    []*tmpl.Template
+	Templates    tmpl.TemplateList
 )
 
 //Raw Json type for Type Converter

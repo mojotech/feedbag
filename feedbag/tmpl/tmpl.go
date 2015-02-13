@@ -20,7 +20,7 @@ type Template struct {
 	Template  string `json:"template"`
 }
 
-type TemplateList []Template
+type TemplateList []*Template
 
 func (t TemplateList) Len() int {
 	return len(t)
@@ -30,13 +30,13 @@ func (t TemplateList) Swap(i, j int) {
 	t[i], t[j] = t[j], t[i]
 }
 
-func ParseDir(templatesDir string) ([]*Template, error) {
+func ParseDir(templatesDir string) (TemplateList, error) {
 	files, err := ioutil.ReadDir(templatesDir)
 	if err != nil {
 		return nil, err
 	}
 
-	templates := []*Template{}
+	templates := TemplateList{}
 
 	for _, fileInfo := range files {
 		if strings.HasSuffix(fileInfo.Name(), ".tmpl") {

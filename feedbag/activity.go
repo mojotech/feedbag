@@ -3,8 +3,11 @@ package feedbag
 import (
 	"bytes"
 	"fmt"
+	"sort"
 	"strconv"
 	"text/template"
+
+	"github.com/mojotech/feedbag/feedbag/tmpl"
 )
 
 type Activity struct {
@@ -15,6 +18,12 @@ type Activity struct {
 }
 
 type ActivityList []Activity
+
+type ByPriority struct{ tmpl.TemplateList }
+
+func (b ByPriority) Less(i, j int) bool {
+	return b.TemplateList[i].Priority > b.TemplateList[j].Priority
+}
 
 func (a *ActivityList) List() error {
 	_, err := dbmap.Select(a, "SELECT * FROM ACTIVITIES ORDER BY CreatedAt DESC")
@@ -31,13 +40,26 @@ func (a *Activity) Create() error {
 }
 
 func ActivityParser(p ActivityPayloadList) []Activity {
-	activities := []Activity{}
+	activities := ActivityList{}
 
 	for _, payload := range p {
+		isBreak := make(map[string]bool)
+
+		// Sort templates by priority
+		sort.Sort(ByPriority{Templates})
+
 		for _, template := range Templates {
 			activity := Activity{}
 
+			if isBreak[template.Event] {
+				continue
+			}
+
 			if CheckEventType(template.Event, payload) && ValidateConditional(template.Condition, payload) {
+				if template.Break {
+					isBreak[template.Event] = true
+				}
+
 				fmt.Println("Building activity")
 
 				//Create the activity for this template and append to list
