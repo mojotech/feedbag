@@ -45,7 +45,7 @@ $ go get github.com/codegangsta/gin
 ```sh
 $ git clone [git-repo-url] feedbag
 $ cd feedbag
-$ godep restore
+$ go get ./...
 ```
 
 ### Startup
