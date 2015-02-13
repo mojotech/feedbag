@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 	"runtime"
 
+	"github.com/fogcreek/logging"
 	"github.com/mojotech/feedbag/feedbag"
 )
 
@@ -53,6 +54,6 @@ func main() {
 
 	err := feedbag.Start(port, templatesDir, publicDir)
 	if err != nil {
-		log.Fatalln("Feedbag failed to start:", err)
+		logging.ErrorWithTags([]string{"app"}, "Feedbag failed to start:", err)
 	}
 }

@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"code.google.com/p/goauth2/oauth"
+	"github.com/fogcreek/logging"
 	"github.com/google/go-github/github"
 )
 
@@ -42,11 +43,14 @@ func userRoutine(u User, c chan<- []Activity) error {
 	for {
 		events, resp, err := client.Activity.ListEventsPerformedByUser(u.Username, false, &opts)
 		if err != nil {
-			panic(err)
+			logging.WarnWithTags([]string{"github"}, "Problem retrieving events for user", u.Username, err.Error())
 		}
 
 		activityPayload, err := ProcessPayload(events, u)
-		checkErr(err, "Failed to process payload")
+		if err != nil {
+			logging.WarnWithTags([]string{"payload"}, "Failed to process payload", err.Error())
+			continue
+		}
 
 		activities := ActivityParser(activityPayload.SaveUnique())
 

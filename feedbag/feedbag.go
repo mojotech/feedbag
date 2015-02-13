@@ -5,10 +5,10 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"log"
 	"os"
 
 	"github.com/begizi/gin-cors"
+	"github.com/fogcreek/logging"
 	"github.com/gin-gonic/contrib/static"
 	"github.com/gin-gonic/gin"
 	"github.com/go-gorp/gorp"
@@ -38,7 +38,10 @@ func Start(port, templatesDir string, publicDir string) error {
 	TemplatesDir = templatesDir
 	var err error
 	Templates, err = tmpl.ParseDir(TemplatesDir)
-	checkErr(err, "Failed to parse templates")
+	if err != nil {
+		logging.ErrorWithTags([]string{"templates"}, "Failed to parse templates", err.Error())
+		return err
+	}
 
 	// Setup Goth Authentication
 	goth.UseProviders(
@@ -72,12 +75,6 @@ func Start(port, templatesDir string, publicDir string) error {
 	r.Run(fmt.Sprintf(":%s", port))
 
 	return nil
-}
-
-func checkErr(err error, msg string) {
-	if err != nil {
-		log.Fatalln(msg, err)
-	}
 }
 
 func (me TypeConverter) ToDb(val interface{}) (interface{}, error) {
@@ -132,7 +129,9 @@ func setupDb() *gorp.DbMap {
 	// connect to db using standard Go database/sql API
 	// use whatever database/sql driver you wish
 	db, err := sql.Open("sqlite3", "./feedbag.bin")
-	checkErr(err, "sql.Open failed")
+	if err != nil {
+		logging.ErrorWithTags([]string{"sqlite", "db"}, "Failed to open sqlite database", err.Error())
+	}
 
 	// construct a gorp DbMap
 	dbmap := &gorp.DbMap{Db: db, Dialect: gorp.SqliteDialect{}}
@@ -148,7 +147,9 @@ func setupDb() *gorp.DbMap {
 	// create the table. in a production system you'd generally
 	// use a migration tool, or create the tables via scripts
 	err = dbmap.CreateTablesIfNotExists()
-	checkErr(err, "Create tables failed")
+	if err != nil {
+		logging.ErrorWithTags([]string{"sql"}, "Create tables failed", err.Error())
+	}
 
 	return dbmap
 }
