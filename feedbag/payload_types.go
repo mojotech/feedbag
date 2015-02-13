@@ -1,5 +1,7 @@
 package feedbag
 
+import "time"
+
 // GithubUser
 type GithubUser struct {
 	Id        int    `json:"id,omitempty"`
@@ -56,29 +58,32 @@ type PullRequest struct {
 	ChangedFiles   int        `json:"changed_files,omitempty"`
 	ReviewComments int        `json:"review_comments,omitempty"`
 	Sender         GithubUser `json:"sender,omitempty,omitempty"`
+	CreatedAt      time.Time  `json:"created_at"`
 }
 
 // Issue
 type Issue struct {
-	Id       int        `json:"id,omitempty"`
-	HtmlUrl  string     `json:"html_url,omitempty"`
-	Number   int        `json:"number,omitempty"`
-	Title    string     `json:"title,omitempty"`
-	Body     string     `json:"body,omitempty"`
-	User     GithubUser `json:"user,omitempty"`
-	Labels   Labels     `json:"labels,omitempty"`
-	State    string     `json:"state,omitempty"`
-	Locked   bool       `json:"locked,omitempty"`
-	Assignee GithubUser `json:"assignee,omitempty"`
-	Comments int        `json:"comments,omitempty"`
+	Id        int        `json:"id,omitempty"`
+	HtmlUrl   string     `json:"html_url,omitempty"`
+	Number    int        `json:"number,omitempty"`
+	Title     string     `json:"title,omitempty"`
+	Body      string     `json:"body,omitempty"`
+	User      GithubUser `json:"user,omitempty"`
+	Labels    Labels     `json:"labels,omitempty"`
+	State     string     `json:"state,omitempty"`
+	Locked    bool       `json:"locked,omitempty"`
+	Assignee  GithubUser `json:"assignee,omitempty"`
+	Comments  int        `json:"comments,omitempty"`
+	CreatedAt time.Time  `json:"created_at"`
 }
 
 // Comment
 type Comment struct {
-	Id      int        `json:"id,omitempty"`
-	HtmlUrl string     `json:"html_url,omitempty"`
-	Body    string     `json:"body,omitempty"`
-	User    GithubUser `json:"user,omitempty"`
+	Id        int        `json:"id,omitempty"`
+	HtmlUrl   string     `json:"html_url,omitempty"`
+	Body      string     `json:"body,omitempty"`
+	User      GithubUser `json:"user,omitempty"`
+	CreatedAt time.Time  `json:"created_at"`
 }
 
 type Location struct {

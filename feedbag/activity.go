@@ -6,6 +6,7 @@ import (
 	"sort"
 	"strconv"
 	"text/template"
+	"time"
 
 	"github.com/mojotech/feedbag/feedbag/tmpl"
 )
@@ -14,6 +15,7 @@ type Activity struct {
 	Id         int64           `json:"id"`
 	TemplateId string          `json:"template_id"`
 	Event      ActivityPayload `json:"event"`
+	EventTime  time.Time       `json:"event_time"`
 	TimeStamp
 }
 
@@ -50,6 +52,9 @@ func ActivityParser(p ActivityPayloadList) []Activity {
 
 		for _, template := range Templates {
 			activity := Activity{}
+
+			//Set the event time on the activity object to the payloads event time
+			activity.EventTime = payload.EventTime
 
 			if isBreak[template.Event] {
 				continue
