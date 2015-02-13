@@ -33,15 +33,26 @@ type ActivityPayload struct {
 	ReopenedIssue            bool `json:"reopened_issue"`
 	Fork                     bool `json:"fork"`
 	Push                     bool `json:"push"`
+	PushCreated              bool `json:"push_created"`
+	PushDeleted              bool `json:"push_deleted"`
+	ForcePush                bool `json:"force_push"`
 	CreateCommitComment      bool `json:"create_commit_comment"`
 	CreateIssueComment       bool `json:"create_issue_comment"`
 
 	//User
 	EventOwner User `json:"action_creator"db:"-"`
 
+	//Payload Fields
+	Action       string `json:"action,omitempty"`
+	Number       int    `json:"number,omitempty"`
+	Ref          string `json:"ref,omitempty"`
+	Created      bool   `json:"created,omitempty"`
+	Deleted      bool   `json:"deleted,omitempty"`
+	Forced       bool   `json:"forced,omitempty"`
+	Size         int    `json:"size,omitempty"`
+	DistinctSize int    `json:"distinct_size,omitempty"`
+
 	//Payload Structs
-	Action      string      `json:"action,omitempty"`
-	Number      int         `json:"number,omitempty"`
 	PullRequest PullRequest `json:"pull_request"db:"-"`
 	Repository  Repository  `json:"repository"db:"-"`
 	Issue       Issue       `json:"issue"db:"-"`
@@ -51,6 +62,8 @@ type ActivityPayload struct {
 	Assignee    GithubUser  `json:"assignee"db:"-"`
 	Forkee      Forkee      `json:"forkee"db:"-"`
 	Commits     Commits     `json:"commits"db:"-"`
+	Pusher      GithubUser  `json:"pusher"db:"-"`
+	HeadCommit  Commit      `json:"head_commit"db:"-"`
 }
 
 type ActivityPayloadList []ActivityPayload
@@ -111,6 +124,21 @@ func (a *ActivityPayload) setEventType(e github.Event) bool {
 			a.CreateIssueComment = true
 		}
 
+	case "PushEvent":
+		if a.Forced {
+			a.EventType = "ForcePush"
+			a.ForcePush = true
+		} else if a.Created {
+			a.EventType = "PushCreated"
+			a.PushCreated = true
+		} else if a.Deleted {
+			a.EventType = "PushDeleted"
+			a.PushDeleted = true
+		} else {
+			a.EventType = "Push"
+			a.Push = true
+		}
+
 	case "PullRequestEvent":
 		switch a.Action {
 		case "opened":
@@ -168,10 +196,6 @@ func (a *ActivityPayload) setEventType(e github.Event) bool {
 			a.EventType = "ReopenedIssue"
 			a.ReopenedIssue = true
 		}
-
-	case "PushEvent":
-		a.EventType = "Push"
-		a.Push = true
 
 	case "CommitCommentEvent":
 		a.EventType = "CreateCommitComment"

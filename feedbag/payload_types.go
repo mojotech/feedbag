@@ -3,6 +3,8 @@ package feedbag
 // GithubUser
 type GithubUser struct {
 	Id        int    `json:"id,omitempty"`
+	Name      string `json:"name,omitempty"`
+	Email     string `json:"email,omitempty"`
 	Login     string `json:"login,omitempty"`
 	Type      string `json:"type,omitempty"`
 	AvatarUrl string `json:"avatar_url,omitempty"`
