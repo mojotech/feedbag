@@ -1,25 +1,25 @@
-package template_test
+package tmpl_test
 
 import (
 	"testing"
 
-	"github.com/mojotech/feedbag/feedbag/template"
+	"github.com/mojotech/feedbag/feedbag/tmpl"
 	. "github.com/smartystreets/goconvey/convey"
 )
 
 func Test_ParseTemplatesDir(t *testing.T) {
 	testDir := "./test_templates"
-	templates, err := template.ParseDir(testDir)
+	templates, err := tmpl.ParseDir(testDir)
 
 	Convey("Given the test template directory", t, func() {
 		So(err, ShouldBeNil)
 		So(len(templates), ShouldEqual, 4)
 
 		var (
-			newPrTmpl         template.Template
-			missingNameTmpl   template.Template
-			newCommentTmpl    template.Template
-			longerMarkersTmpl template.Template
+			newPrTmpl         tmpl.Template
+			missingNameTmpl   tmpl.Template
+			newCommentTmpl    tmpl.Template
+			longerMarkersTmpl tmpl.Template
 		)
 
 		for _, tmpl := range templates {

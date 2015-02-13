@@ -15,14 +15,14 @@ import (
 	"github.com/markbates/goth"
 	"github.com/markbates/goth/providers/github"
 	_ "github.com/mattn/go-sqlite3"
-	"github.com/mojotech/feedbag/feedbag/template"
+	"github.com/mojotech/feedbag/feedbag/tmpl"
 )
 
 var (
 	dbmap        *gorp.DbMap
 	activityChan = make(chan []Activity)
 	TemplatesDir string
-	Templates    []*template.Template
+	Templates    []*tmpl.Template
 )
 
 //Raw Json type for Type Converter
@@ -37,7 +37,7 @@ func Start(port, templatesDir string, publicDir string) error {
 	// Process our templates
 	TemplatesDir = templatesDir
 	var err error
-	Templates, err = template.ParseDir(TemplatesDir)
+	Templates, err = tmpl.ParseDir(TemplatesDir)
 	checkErr(err, "Failed to parse templates")
 
 	// Setup Goth Authentication
