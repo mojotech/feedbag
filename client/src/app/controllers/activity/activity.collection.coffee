@@ -4,6 +4,6 @@ class ActivityModel extends Backbone.Model
 class ActivityCollection extends Backbone.Collection
   model: ActivityModel
   url: "api/activity"
-  comparator: (model) -> -1 * model.get('id')
+  comparator: (model) -> new Date(model.get("event_time")).getTime() * -1
 
 module.exports = new ActivityCollection

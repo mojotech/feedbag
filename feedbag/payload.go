@@ -2,6 +2,7 @@ package feedbag
 
 import (
 	"encoding/json"
+	"time"
 
 	"github.com/google/go-github/github"
 )
@@ -12,6 +13,8 @@ type ActivityPayload struct {
 	RawPayload RawJson `json:"-"`
 
 	EventType string `json:"event_type"`
+
+	EventTime time.Time `json:"event_time"`
 
 	//Events
 	OpenPullRequest          bool `json:"open_pull_request"`
@@ -122,6 +125,7 @@ func (a *ActivityPayload) setEventType(e github.Event) bool {
 		if a.Action == "created" {
 			a.EventType = "CreateIssueComment"
 			a.CreateIssueComment = true
+			a.EventTime = a.Comment.CreatedAt
 		}
 
 	case "PushEvent":
@@ -138,6 +142,7 @@ func (a *ActivityPayload) setEventType(e github.Event) bool {
 			a.EventType = "Push"
 			a.Push = true
 		}
+		a.EventTime = time.Now()
 
 	case "PullRequestEvent":
 		switch a.Action {
@@ -171,6 +176,7 @@ func (a *ActivityPayload) setEventType(e github.Event) bool {
 			a.EventType = "SynchronizedPullRequest"
 			a.SynchronizedPullRequest = true
 		}
+		a.EventTime = a.PullRequest.CreatedAt
 
 	case "IssueEvent":
 		switch a.Action {
@@ -196,10 +202,12 @@ func (a *ActivityPayload) setEventType(e github.Event) bool {
 			a.EventType = "ReopenedIssue"
 			a.ReopenedIssue = true
 		}
+		a.EventTime = a.Issue.CreatedAt
 
 	case "CommitCommentEvent":
 		a.EventType = "CreateCommitComment"
 		a.CreateCommitComment = true
+		a.EventTime = a.Comment.CreatedAt
 
 	case "ForkEvent":
 		a.EventType = "Fork"
@@ -208,6 +216,7 @@ func (a *ActivityPayload) setEventType(e github.Event) bool {
 	case "PullRequestReviewCommentEvent":
 		a.EventType = "CreatePullRequestComment"
 		a.CreatePullRequestComment = true
+		a.EventTime = a.PullRequest.CreatedAt
 
 	default:
 		return false
