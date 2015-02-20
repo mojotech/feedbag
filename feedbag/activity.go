@@ -28,8 +28,9 @@ func (b ByPriority) Less(i, j int) bool {
 	return b.TemplateList[i].Priority > b.TemplateList[j].Priority
 }
 
-func (a *ActivityList) List() error {
-	_, err := dbmap.Select(a, "SELECT * FROM ACTIVITIES ORDER BY CreatedAt DESC")
+func (a *ActivityList) List(limit int, page int) error {
+	offset := limit * (page - 1)
+	_, err := dbmap.Select(a, "SELECT * FROM ACTIVITIES ORDER BY EventTime DESC LIMIT ? OFFSET ?", limit, offset)
 	return err
 }
 

@@ -3,6 +3,7 @@ package feedbag
 import (
 	"database/sql"
 	"net/http"
+	"strconv"
 
 	"github.com/fogcreek/logging"
 	"github.com/gin-gonic/gin"
@@ -41,8 +42,19 @@ func templateHandler(c *gin.Context) {
 }
 
 func getActivity(c *gin.Context) {
+	limit, _ := strconv.Atoi(c.Request.URL.Query().Get("limit"))
+	page, _ := strconv.Atoi(c.Request.URL.Query().Get("page"))
+
+	if limit == 0 {
+		limit = 50
+	}
+
+	if page == 0 {
+		page = 1
+	}
+
 	a := ActivityList{}
-	err := a.List()
+	err := a.List(limit, page)
 	if err != nil {
 		logging.WarnWithTags([]string{"api"}, "Activity endpoint route failed.", err.Error())
 		c.JSON(400, gin.H{"error": err})
