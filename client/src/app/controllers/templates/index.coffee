@@ -1,5 +1,9 @@
 templates = {}
 
+emojify.setConfig(img_dir: "assets/images/emoji")
+Handlebars.registerHelper('marked', (text)-> marked(text))
+Handlebars.registerHelper('emojify', (text)-> emojify.replace(text))
+
 class Templates
   fetch: (cb) ->
     $.getJSON "templates", (res) ->
