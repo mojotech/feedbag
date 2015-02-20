@@ -1,11 +1,12 @@
+test-server:
+	go get ./...
+	cd feedbag && go test ./...
+
 release:
-	@make test
+	@make test-server
 	cd client && gulp build
 	rm -rf public
 	mv ./client/dist ./public
-
-test:
-	cd feedbag && go test ./...
 
 deps:
 	cd client && npm i && bower i
@@ -17,4 +18,4 @@ watch-server:
 watch-client:
 	cd client && gulp serve
 
-.PHONY: release test deps watch-server watch-client
+.PHONY: test-serve rrelease deps watch-server watch-client
