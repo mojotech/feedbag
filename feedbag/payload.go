@@ -15,6 +15,9 @@ type ActivityPayload struct {
 
 	EventType string `json:"event_type"`
 
+	Repo github.Repository   `json:"repo,omitempty"db:"-"`
+	Org  github.Organization `json:"org,omitempty"db:"-"`
+
 	EventTime time.Time `json:"event_time"`
 
 	//Events
@@ -58,7 +61,6 @@ type ActivityPayload struct {
 
 	//Payload Structs
 	PullRequest PullRequest `json:"pull_request"db:"-"`
-	Repository  Repository  `json:"repository"db:"-"`
 	Issue       Issue       `json:"issue"db:"-"`
 	Comment     Comment     `json:"comment"db:"-"`
 	Label       Label       `json:"label"db:"-"`
@@ -102,6 +104,8 @@ func ProcessPayload(e []github.Event, u User) (ActivityPayloadList, error) {
 
 		// Set Github Id of event. Has Unique constraint on the database.
 		a.GithubId = *event.ID
+		a.Repo = *event.Repo
+		a.Org = *event.Org
 
 		// Set Raw Payload. We don't care if this errors out.
 		_ = json.Unmarshal(*event.RawPayload, &a.RawPayload)
