@@ -1,8 +1,7 @@
 package feedbag
 
 import (
-	"log"
-
+	"github.com/fogcreek/logging"
 	"github.com/googollee/go-socket.io"
 )
 
@@ -13,14 +12,14 @@ func SetupSocketIO() (*socketio.Server, error) {
 	}
 
 	server.On("connection", func(so socketio.Socket) {
-		log.Println("New socket.io connection:", so.Id())
+		logging.InfoWithTags([]string{"socket.io"}, "New socket.io connection:", so.Id())
 		so.Join("feedbag")
 		so.On("disconnection", func() {
 			// no op
 		})
 	})
 	server.On("error", func(so socketio.Socket, err error) {
-		log.Println("Socket.io server error:", err.Error())
+		logging.ErrorWithTags([]string{"socket.io"}, "Error on socket.io server", err.Error())
 	})
 
 	return server, nil

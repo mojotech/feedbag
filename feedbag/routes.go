@@ -2,9 +2,9 @@ package feedbag
 
 import (
 	"database/sql"
-	"log"
 	"net/http"
 
+	"github.com/fogcreek/logging"
 	"github.com/gin-gonic/gin"
 	"github.com/googollee/go-socket.io"
 	"github.com/markbates/goth/gothic"
@@ -33,7 +33,9 @@ func SetupRoutes(r *gin.Engine, s *socketio.Server) {
 func templateHandler(c *gin.Context) {
 	var err error
 	Templates, err = tmpl.ParseDir(TemplatesDir)
-	checkErr(err, "Failed to load templates")
+	if err != nil {
+		logging.ErrorWithTags([]string{"templates"}, "Failed to load templates.", err.Error())
+	}
 
 	c.JSON(200, Templates)
 }
@@ -42,6 +44,7 @@ func getActivity(c *gin.Context) {
 	a := ActivityList{}
 	err := a.List()
 	if err != nil {
+		logging.WarnWithTags([]string{"api"}, "Activity endpoint route failed.", err.Error())
 		c.JSON(400, gin.H{"error": err})
 	}
 
@@ -52,6 +55,7 @@ func getUsers(c *gin.Context) {
 	u := UserList{}
 	err := u.List()
 	if err != nil {
+		logging.WarnWithTags([]string{"api"}, "Users endpoint route failed.", err.Error())
 		c.JSON(400, gin.H{"error": err})
 	}
 
@@ -61,14 +65,16 @@ func getUsers(c *gin.Context) {
 func providerCallback(c *gin.Context) {
 	// Run user auth using the gothic library
 	user, err := gothic.CompleteUserAuth(c.Writer, c.Request)
-	checkErr(err, "Failed to authenicate user")
+	if err != nil {
+		logging.ErrorWithTags([]string{"github", "api"}, "Failed to create user from callback", err.Error())
+	}
 
 	u := User{}
 
 	err = u.GetByUsername(user.RawData["login"].(string))
 	if err != nil {
 		if err != sql.ErrNoRows {
-			log.Fatalln("Failed to read from user table", err)
+			logging.ErrorWithTags([]string{"api"}, "Failed to read from user table", err.Error())
 			return
 		}
 	}
@@ -86,10 +92,14 @@ func providerCallback(c *gin.Context) {
 	if u.Id != 0 {
 		u.UpdateTime()
 		_, err = dbmap.Update(&u)
-		checkErr(err, "Failed to update user row")
+		if err != nil {
+			logging.ErrorWithTags([]string{"db"}, "Failed to update user row", err.Error())
+		}
 	} else {
 		err = u.Create()
-		checkErr(err, "Failed to create new user row")
+		if err != nil {
+			logging.ErrorWithTags([]string{"db"}, "Failed to create new user row", err.Error())
+		}
 
 		//Add the user's go routine
 		StartUserRoutine(u, activityChan)

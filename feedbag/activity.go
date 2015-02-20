@@ -8,6 +8,7 @@ import (
 	"text/template"
 	"time"
 
+	"github.com/fogcreek/logging"
 	"github.com/mojotech/feedbag/feedbag/tmpl"
 )
 
@@ -65,7 +66,7 @@ func ActivityParser(p ActivityPayloadList) []Activity {
 					isBreak[template.Event] = true
 				}
 
-				fmt.Println("Building activity")
+				logging.InfoWithTags([]string{"activity"}, "Adding activity for event ", activity.Event.EventType)
 
 				//Create the activity for this template and append to list
 				activity.TemplateId = template.Id
@@ -73,7 +74,9 @@ func ActivityParser(p ActivityPayloadList) []Activity {
 				activity.UpdateTime()
 
 				err := activity.Create()
-				checkErr(err, "Problem saving activity")
+				if err != nil {
+					logging.WarnWithTags([]string{"activity"}, "Failed to save activity", err.Error())
+				}
 
 				activities = append(activities, activity)
 
@@ -99,14 +102,20 @@ func ValidateConditional(c string, p ActivityPayload) bool {
 	buf := new(bytes.Buffer)
 
 	tmpl, err := template.New("condition").Parse(fmt.Sprintf("{{%s}}", c))
-	checkErr(err, "Failed to parse template condition")
+	if err != nil {
+		logging.ErrorWithTags([]string{"condition"}, "Failed to parse template condition", err.Error())
+	}
 
 	err = tmpl.Execute(buf, p)
-	checkErr(err, "Failed to execute template condition")
+	if err != nil {
+		logging.ErrorWithTags([]string{"condition"}, "Failed to execute template condition", err.Error())
+	}
 
 	resultStr := buf.String()
 	result, err := strconv.ParseBool(resultStr)
-	checkErr(err, "Failed to parse bool from condition")
+	if err != nil {
+		logging.ErrorWithTags([]string{"condition"}, "Failed to parse bool from condition return", err.Error())
+	}
 
 	return result
 }

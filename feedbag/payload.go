@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"time"
 
+	"github.com/fogcreek/logging"
 	"github.com/google/go-github/github"
 )
 
@@ -94,6 +95,7 @@ func ProcessPayload(e []github.Event, u User) (ActivityPayloadList, error) {
 
 		// Marshal raw payload into activity payload struct.
 		if err := json.Unmarshal(*event.RawPayload, &a); err != nil {
+			logging.DebugWithTags([]string{"payload", "github", "json"}, "Error unmarshaling raw payload.", err.Error())
 			// If error unmarshaling payload reset the loop
 			continue
 		}
