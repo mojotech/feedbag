@@ -5,9 +5,9 @@ import (
 	"strconv"
 	"time"
 
-	"code.google.com/p/goauth2/oauth"
 	"github.com/fogcreek/logging"
 	"github.com/google/go-github/github"
+	"golang.org/x/oauth2"
 )
 
 func StartExistingUsers(c chan<- []Activity) error {
@@ -30,12 +30,25 @@ func StartUserRoutine(u User, c chan<- []Activity) {
 	go userRoutine(u, c)
 }
 
+type tokenSource struct {
+	token *oauth2.Token
+}
+
+func (t tokenSource) Token() (*oauth2.Token, error) {
+	return t.token, nil
+}
+
 func userRoutine(u User, c chan<- []Activity) error {
-	t := &oauth.Transport{
-		Token: &oauth.Token{AccessToken: u.AccessToken},
+
+	ts := tokenSource{
+		&oauth2.Token{
+			AccessToken: u.AccessToken,
+		},
 	}
 
-	client := github.NewClient(t.Client())
+	tc := oauth2.NewClient(oauth2.NoContext, ts)
+
+	client := github.NewClient(tc)
 
 	//List Options Page, PerPage
 	opts := github.ListOptions{1, 50}
