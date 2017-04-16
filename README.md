@@ -1,5 +1,7 @@
 # Feedbag
 
+[![Join the chat at https://gitter.im/mojotech/feedbag](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/mojotech/feedbag?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Feedbag is a TV first, multiuser Github events dashboard for organizations and teams.
 
 Designed to be flexable, simple, and highly configurable, new widget dashboards can be added by simply adding a template to the `templates/` directory. The config options at the top of the templates define which github event triggers that template to render on the client.
